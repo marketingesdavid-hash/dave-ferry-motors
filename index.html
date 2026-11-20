@@ -105,7 +105,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 #track-library.is-expanded .music-track:nth-child(n+4){display:grid}
 #track-library .music-track .shared-track-player{grid-column:1/-1;width:100%;max-width:540px;margin:.5rem auto 0}
 #music .more-music{display:block;margin:1rem auto 1.1rem;padding:.7rem 1.3rem;border:1px solid #73836f;border-radius:.35rem;background:#1c261b;color:#f6eedc;font-weight:750;cursor:pointer}
-#music .more-music[aria-expanded="true"] span{display:inline-block;transform:rotate(180deg)}
+#music .more-music span{display:inline-block;margin-left:.3rem}
 #now-playing{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media(max-width:540px){#track-library .music-track{grid-template-columns:86px minmax(0,1fr);gap:.55rem .7rem}#track-library .music-track .music-play{grid-column:2;justify-self:start;margin:0}#track-library .music-track .shared-track-player{grid-column:1/-1}}
 </style></head>
@@ -258,6 +258,16 @@ document.querySelectorAll('[data-interest]').forEach(a=>a.addEventListener('clic
   if(moreButton){
     moreButton.addEventListener('click',()=>{
       const expanded=moreButton.getAttribute('aria-expanded')==='true';
+      if(expanded && current && [...library.querySelectorAll('.music-track')].indexOf(current)>=3){
+        frame.removeAttribute('src');
+        wrapper.hidden=true;
+        current.classList.remove('is-playing');
+        const activeButton=current.querySelector('.music-play');
+        activeButton.textContent='▶ Play';
+        activeButton.setAttribute('aria-label','Play '+current.querySelector('h3').textContent);
+        current=null;
+        status.textContent='Playback stopped.';
+      }
       library.classList.toggle('is-expanded',!expanded);
       moreButton.setAttribute('aria-expanded',String(!expanded));
       moreButton.innerHTML=!expanded?'Fewer songs <span aria-hidden="true">⌃</span>':'More songs <span aria-hidden="true">⌄</span>';
