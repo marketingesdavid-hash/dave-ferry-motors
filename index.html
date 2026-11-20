@@ -96,6 +96,18 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 #music-player{max-width:640px;margin:1.1rem 0 .5rem}
 #now-playing{margin:.4rem 0 1.2rem}
 @media(max-width:540px){.music-track .music-play{margin-left:auto}}
+
+/* Song cards: artwork left, details and controls right, player within selected card. */
+#track-library .music-track{display:grid;grid-template-columns:clamp(86px,18vw,124px) minmax(0,1fr) auto;align-items:center;column-gap:1rem;row-gap:.55rem;padding:.85rem}
+#track-library .music-art{width:100%;height:auto;aspect-ratio:1;min-width:0;flex:none}
+#track-library .music-track-info{width:100%}
+#track-library .music-track:nth-child(n+4){display:none}
+#track-library.is-expanded .music-track:nth-child(n+4){display:grid}
+#track-library .music-track .shared-track-player{grid-column:1/-1;width:100%;max-width:540px;margin:.5rem auto 0}
+#music .more-music{display:block;margin:1rem auto 1.1rem;padding:.7rem 1.3rem;border:1px solid #73836f;border-radius:.35rem;background:#1c261b;color:#f6eedc;font-weight:750;cursor:pointer}
+#music .more-music[aria-expanded="true"] span{display:inline-block;transform:rotate(180deg)}
+#now-playing{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:540px){#track-library .music-track{grid-template-columns:86px minmax(0,1fr);gap:.55rem .7rem}#track-library .music-track .music-play{grid-column:2;justify-self:start;margin:0}#track-library .music-track .shared-track-player{grid-column:1/-1}}
 </style></head>
 <body><svg aria-hidden="true" style="position:absolute;width:0;height:0" xmlns="http://www.w3.org/2000/svg"><symbol id="facebook" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.46H15.2c-1.24 0-1.63.77-1.63 1.56V12h2.77l-.44 2.89h-2.33v6.99A10 10 0 0 0 22 12z"></path></symbol><symbol id="instagram" viewbox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-3.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"></path></symbol><symbol id="youtube" viewbox="0 0 24 24"><path d="M23 7s-.2-1.6-.9-2.3C21.2 3.8 20.3 3.8 20 3.7 17.1 3.5 12 3.5 12 3.5s-5.1 0-8 .2c-.3.1-1.2.1-2.1 1C1.2 5.4 1 7 1 7s-.3 1.9-.3 3.8v2.4C.7 15.1 1 17 1 17s.2 1.6.9 2.3c.9.9 2.1.9 2.6 1 1.8.2 7.5.2 7.5.2s5.1 0 8-.2c.3-.1 1.2-.1 2.1-1 .7-.7.9-2.3.9-2.3s.3-1.9.3-3.8v-2.4C23.3 8.9 23 7 23 7zM9.5 16V8l7 4-7 4z"></path></symbol><symbol id="tiktok" viewbox="0 0 24 24"><path d="M16 2h-4v13a3 3 0 1 1-3-3c.4 0 .7 0 1 .2V8.1A7 7 0 1 0 16 15V8a9 9 0 0 0 5 1.5v-4A5 5 0 0 1 16 2z"></path></symbol></svg>
 <header><div class="wrap"><a class="brand inset-lettering" href="#top">Dave Ferry Motors<span aria-hidden="true" class="inset-line">Dave Ferry Motors</span></a><nav aria-label="Main navigation"><a href="#shirts">T-shirts</a><a href="#videos">Videos</a><a href="#music">Music</a><a href="#stories">Stories</a><a href="#patches">Patches</a><a href="#gear">Gear</a><a href="#partners">Partnerships</a><a href="#contact">Contact</a></nav></div></header>
@@ -165,6 +177,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 <article class="music-track" data-video="A_HHja2ODNU"><div class="music-art music-cover" aria-hidden="true"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/A_HHja2ODNU/hqdefault.jpg"></div><div class="music-track-info"><h3>Ride On Brothers</h3><p>Brotherhood on the road</p></div><button type="button" class="music-play" aria-label="Play Ride On Brothers">▶ Play</button></article>
 <article class="music-track" data-playlist="OLAK5uy_kSgtYHC9dmXw1DpfXZvv42pTJuWdT6aSw"><div class="music-art music-cover" aria-hidden="true"><span class="music-art-symbol">♫</span></div><div class="music-track-info"><h3>Side by Side</h3><p>Brotherhood and friendship</p></div><button type="button" class="music-play" aria-label="Play Side by Side">▶ Play</button></article>
 </div>
+<button type="button" id="more-music" class="more-music" aria-expanded="false" aria-controls="track-library">More songs <span aria-hidden="true">⌄</span></button>
 <div class="shared-track-player" id="music-player" hidden><iframe id="music-iframe" title="Dave Ferry Motors Music player" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
 <p id="now-playing" role="status" aria-live="polite"></p>
 </section>
@@ -241,6 +254,15 @@ document.querySelectorAll('[data-interest]').forEach(a=>a.addEventListener('clic
   const status=document.getElementById('now-playing');
   if(!library||!wrapper||!frame)return;
   let current=null;
+  const moreButton=document.getElementById('more-music');
+  if(moreButton){
+    moreButton.addEventListener('click',()=>{
+      const expanded=moreButton.getAttribute('aria-expanded')==='true';
+      library.classList.toggle('is-expanded',!expanded);
+      moreButton.setAttribute('aria-expanded',String(!expanded));
+      moreButton.innerHTML=!expanded?'Fewer songs <span aria-hidden="true">⌃</span>':'More songs <span aria-hidden="true">⌄</span>';
+    });
+  }
   library.querySelectorAll('.music-track[data-video], .music-track[data-playlist]').forEach(track=>{
     const button=track.querySelector('.music-play');
     button.addEventListener('click',()=>{
@@ -267,6 +289,7 @@ document.querySelectorAll('[data-interest]').forEach(a=>a.addEventListener('clic
         ?base+encodeURIComponent(track.dataset.video)+'?autoplay=1&rel=0'
         :base+'videoseries?list='+encodeURIComponent(track.dataset.playlist)+'&autoplay=1&rel=0';
       frame.src=source;
+      track.appendChild(wrapper);
       wrapper.hidden=false;
       current=track;
       track.classList.add('is-playing');
