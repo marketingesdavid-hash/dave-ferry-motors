@@ -79,13 +79,13 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 <p style="margin-top:1.4rem"><a class="button" href="https://music.amazon.com/artists/B0H6MY4WFV/dave-ferry-motors" rel="noopener noreferrer" target="_blank">Browse verified music releases</a></p>
 </section>
 <section class="wrap" id="videos">
-<p class="eyebrow">On the road · original footage</p>
+<p class="eyebrow">On the road · featured short</p>
 <h2>Featured motorcycle videos</h2>
-<p>A hand-picked video from Dave Ferry Motors, embedded directly from YouTube. Explore the channel for new builds, classic cars and the best moments from the road.</p>
-<div class="feature-video"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/la6IScsDaJ8" title="Dave Ferry Motors — Brussels Moto Retro exhibition"></iframe></div>
+<p>Featured Dave Ferry Motors Short. Watch the latest hand-picked motorcycle content here, and explore the channel for more videos and original music.</p>
+<div class="feature-video"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/gWqrV0kdCko" title="Dave Ferry Motors — featured YouTube Short"></iframe></div>
 <div class="grid" style="margin-top:1rem">
-<article><h3>Brussels Moto Retro</h3><p>A real Dave Ferry Motors video from a classic motorcycle exhibition in Brussels.</p><a href="https://www.youtube.com/watch?v=la6IScsDaJ8" rel="noopener noreferrer" target="_blank">Watch on YouTube ↗</a></article>
-<article><h3>More Dave Ferry Motors films</h3><p>Browse the motorcycle films, custom builds and road footage on YouTube.</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors" rel="noopener noreferrer" target="_blank">Discover our videos ↗</a></article>
+<article><h3>Featured Dave Ferry Motors Short</h3><p>One of our selected short-form motorcycle videos.</p><a href="https://www.youtube.com/shorts/gWqrV0kdCko" rel="noopener noreferrer" target="_blank">Watch on YouTube ↗</a></article>
+<article><h3>More Dave Ferry Motors films</h3><p>Explore videos and new releases on the Dave Ferry Motors channel.</p><a href="https://www.youtube.com/channel/UCFkG0R18Sh66VgZMfCcndfA" rel="noopener noreferrer" target="_blank">Visit our YouTube channel ↗</a></article>
 </div></section>
 <section class="wrap" id="stories"><h2>Stories from the Road</h2>
 <!-- Add real stories here. Pair a video link with a short first-person account and add Hungarian or English captions to the video. -->
@@ -140,7 +140,7 @@ document.querySelectorAll('[data-product-link]').forEach(link => {
   });
 });
 // Add the verified profile URLs here. Leave empty until confirmed; no guessed handles.
-const SOCIAL_LINKS={instagram:'',youtube:'',tiktok:''};
+const SOCIAL_LINKS={instagram:'',youtube:'https://www.youtube.com/channel/UCFkG0R18Sh66VgZMfCcndfA',tiktok:''};
 const names={instagram:'Instagram',youtube:'YouTube',tiktok:'TikTok'};document.querySelectorAll('[data-social]').forEach(container=>{Object.entries(names).forEach(([key,name])=>{const url=SOCIAL_LINKS[key];const el=document.createElement(url?'a':'button');el.innerHTML=`<svg aria-hidden="true"><use href="#${key}"></use></svg><span>${name}</span>`;if(url){el.href=url;el.target='_blank';el.rel='noopener noreferrer';el.setAttribute('aria-label',`Dave Ferry Motors on ${name}`)}else{el.type='button';el.title='Verified profile URL pending';el.setAttribute('aria-label',`${name}: profile link pending`);el.addEventListener('click',()=>document.getElementById('missing').showModal())}container.appendChild(el)})});
 document.getElementById('brief').addEventListener('submit',e=>{e.preventDefault();const d=new FormData(e.target);document.getElementById('briefOutput').textContent=`Partnership enquiry — Dave Ferry Motors\n\nName: ${d.get('name')}\nBrand: ${d.get('brand')}\nProduct / website: ${d.get('product')}\nTarget market: ${d.get('market')||'To discuss'}\nIndicative budget: ${d.get('budget')||'To discuss'}\n\n${d.get('message')}`;document.getElementById('briefResult').hidden=false;document.getElementById('copyStatus').textContent=''});document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(document.getElementById('briefOutput').textContent);document.getElementById('copyStatus').textContent='Copied. Paste it into your message.'}catch{document.getElementById('copyStatus').textContent='Please select and copy the brief text manually.'}});
 
