@@ -91,7 +91,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 <div class="grid" id="track-library"><article><h3>Army of the King</h3><p>Epic biker anthem</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Army+of+the+King" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>Knight of the Cross</h3><p>Powerful, cinematic road music</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Knight+of+the+Cross" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>Ride Beyond the Stars</h3><p>Tribute to fallen riders</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Ride+Beyond+the+Stars" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>Ride with the Missing</h3><p>Remembering those beside us</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Ride+with+the+Missing" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>Born for the Open Road</h3><p>Freedom, travel and open roads</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Born+for+the+Open+Road" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>First Kick</h3><p>The energy of a new ride</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+First+Kick" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>Side by Side</h3><p>Friendship and brotherhood</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Side+by+Side" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>Built for the Lights</h3><p>Custom machines and night rides</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+Built+for+the+Lights" rel="noopener noreferrer" target="_blank">Find on YouTube ↗</a></article><article><h3>The Last Ride</h3><p>Reflective biker storytelling</p><a href="https://www.youtube.com/results?search_query=Dave+Ferry+Motors+The+Last+Ride" rel="noopener <section class="wrap" id="videos">
 <p class="eyebrow">Featured Dave Ferry Motors shorts</p>
 <h2>Motorcycles. Music. Moments.</h2>
-<p>Discover our hand-picked motorcycle shorts, including the music-driven Thundering Night. Two more standout films are being selected for this gallery.</p>
+<p>Discover our hand-picked motorcycle shorts, including the music-driven Thundering Night. The newest videos from our YouTube channel appear here automatically as they are published.</p>
 <div class="shorts-gallery">
 <article class="short-card"><div class="short-frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/gWqrV0kdCko" title="Thundering Night — Dave Ferry Motors" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><div class="short-card-body"><h3>Thundering Night</h3><p>Featured motorcycle short with Dave Ferry Motors music.</p><a href="https://www.youtube.com/shorts/gWqrV0kdCko" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div></article>
 <article class="short-card"><div class="short-frame short-placeholder"><div><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="20" cy="56" r="14"/><circle cx="61" cy="56" r="14"/><path d="M20 56l15-29 12 29H20l17-17h15l9 17M31 25h12M51 26h12"/></svg><span>Next featured short<br>Coming soon</span></div></div><div class="short-card-body"><h3>More rides to come</h3><p>We're choosing another standout Dave Ferry Motors film.</p><a href="https://www.youtube.com/channel/UCFkG0R18Sh66VgZMfCcndfA/shorts" target="_blank" rel="noopener noreferrer">Explore our Shorts</a></div></article>
@@ -161,6 +161,46 @@ const names={instagram:'Instagram',youtube:'YouTube',tiktok:'TikTok',facebook:'F
 document.getElementById('brief').addEventListener('submit',e=>{e.preventDefault();const d=new FormData(e.target);document.getElementById('briefOutput').textContent=`Partnership enquiry — Dave Ferry Motors\n\nName: ${d.get('name')}\nBrand: ${d.get('brand')}\nProduct / website: ${d.get('product')}\nTarget market: ${d.get('market')||'To discuss'}\nIndicative budget: ${d.get('budget')||'To discuss'}\n\n${d.get('message')}`;document.getElementById('briefResult').hidden=false;document.getElementById('copyStatus').textContent=''});document.getElementById('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(document.getElementById('briefOutput').textContent);document.getElementById('copyStatus').textContent='Copied. Paste it into your message.'}catch{document.getElementById('copyStatus').textContent='Please select and copy the brief text manually.'}});
 
 document.querySelectorAll('[data-interest]').forEach(a=>a.addEventListener('click',()=>{const field=document.querySelector('[name=product]');if(!field.value)field.value=a.dataset.interest}));
+</script>
+
+<script>
+/* Latest YouTube uploads are refreshed periodically by GitHub Actions. */
+(async () => {
+  const gallery = document.querySelector('.shorts-gallery');
+  if (!gallery) return;
+  try {
+    const response = await fetch('/data/latest-videos.json', {cache: 'no-cache'});
+    if (!response.ok) throw new Error('Video list unavailable');
+    const data = await response.json();
+    const videos = (Array.isArray(data.videos) ? data.videos : [])
+      .filter(v => /^[a-zA-Z0-9_-]{11}$/.test(v.id))
+      .slice(0, 3);
+    if (!videos.length) return;
+    const cards = Array.from(gallery.querySelectorAll('.short-card'));
+    videos.forEach((video, i) => {
+      const card = cards[i];
+      if (!card) return;
+      const frame = card.querySelector('.short-frame');
+      frame.classList.remove('short-placeholder');
+      frame.replaceChildren();
+      const iframe = document.createElement('iframe');
+      iframe.loading = 'lazy';
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + video.id;
+      iframe.title = video.title || 'Dave Ferry Motors motorcycle video';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      frame.appendChild(iframe);
+      card.querySelector('h3').textContent = video.title || 'Latest motorcycle video';
+      card.querySelector('p').textContent = 'Latest Dave Ferry Motors YouTube upload.';
+      const link = card.querySelector('a');
+      link.href = 'https://www.youtube.com/watch?v=' + video.id;
+      link.textContent = 'Watch on YouTube';
+    });
+  } catch (error) {
+    console.info('Keeping curated Shorts gallery until automatic video data is available.');
+  }
+})();
 </script>
 </body>
 </html>
