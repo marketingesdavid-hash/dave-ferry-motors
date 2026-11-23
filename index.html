@@ -265,8 +265,26 @@ const products=[
  {key:'california',title:'Moto Guzzi California 1100i Custom',art:'assets/dfm-art-california.svg',print:'assets/dfm-print-california.svg',info:'MOTO GUZZI CALIFORNIA 1100i CUSTOM',story:'Deep red and gold custom café racer; year not confirmed.'},
  {key:'nightrod',title:'Green Harley-Davidson custom – 2010',art:'assets/dfm-art-nightrod.svg',print:'assets/dfm-print-nightrod.svg',info:'HARLEY-DAVIDSON CUSTOM – 2010',story:'Bright green Bozzies custom with its unmistakably oversized rear tyre.'},
  {key:'chromo',title:'Chrome Harley-Davidson Softail Custom – 2010',art:'assets/dfm-art-chromo.svg',print:'assets/dfm-print-chromo.svg',info:'HARLEY-DAVIDSON FXSTC CUSTOM – 2010',story:'A custom build with dramatic chrome finish and tall handlebars.'},
- {key:'nsu',title:'NSU 500 1T – 1930',art:'assets/dfm-art-nsu.svg',print:'assets/dfm-print-nsu.svg',info:'NSU 500 1T – 1930',story:'Classic German motorcycle with understated period styling.'}
+ {key:'nsu',title:'NSU 500 1T – 1930',art:'assets/dfm-art-nsu.svg',print:'assets/dfm-print-nsu.svg',info:'NSU 500 1T – 1930',story:'Classic German motorcycle with understated period styling.'},
+ {key:'guzzi',title:'Moto Guzzi Arancia Meccanica – 2018',art:'assets/guzzi-art-final.webp',print:'assets/guzzi-art-final.webp',info:'MOTO GUZZI ARANCIA MECCANICA – 2018',story:'Previously featured and approved custom Moto Guzzi.'}
 ];
+// Keep the previously approved Moto Guzzi design in the collection.
+// Create a transparent motorcycle cut-out in-browser from its original art; do not
+// load an obsolete model collage or use a black photo rectangle on white shirts.
+function prepareOriginalGuzzi(){
+ const p=products.find(item=>item.key==='guzzi');if(!p)return;
+ const img=new Image();img.onload=()=>{
+  try{
+   const canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=Math.round(img.naturalHeight*.73);
+   const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0);
+   const data=ctx.getImageData(0,0,canvas.width,canvas.height),v=data.data;
+   for(let i=0;i<v.length;i+=4){const lum=Math.max(v[i],v[i+1],v[i+2]);v[i+3]=Math.round(255*Math.max(0,Math.min(1,(lum-15)/35)))}
+   ctx.putImageData(data,0,0);p.print=canvas.toDataURL('image/png');
+   document.querySelectorAll('.dfm3-print img[src="assets/guzzi-art-final.webp"]').forEach(el=>el.src=p.print);
+  }catch(e){/* Keep approved art as the original fallback */}
+ };img.src=p.art;
+}
+prepareOriginalGuzzi();
 const models=[{key:'older',label:'Older bearded man',top:'36%',width:'41%'},{key:'curvy',label:'Fuller-figured woman',top:'37%',width:'39%'},{key:'blonde',label:'Blonde woman',top:'24%',width:'31%'},{key:'athletic',label:'Athletic man',top:'36%',width:'43%'}];
 const colors=[{key:'black',label:'Black',hex:'#171717'},{key:'white',label:'White',hex:'#fff'},{key:'gray',label:'Grey',hex:'#898989'}];
 const stateMap=new WeakMap();
