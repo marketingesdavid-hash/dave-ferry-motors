@@ -1,0 +1,50 @@
+/* Dave Ferry Motors merch catalogue v3 — only merch section, preserving existing site design */
+#latest-design .dfm-intro {max-width:64ch;margin-bottom:1.4rem}
+#latest-design .dfm-feature{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(290px,.92fr);gap:1.4rem;align-items:start}
+#latest-design .dfm-showroom,.dfm-dialog .dfm-showroom{min-width:0}
+#latest-design .dfm-stage,.dfm-dialog .dfm-stage{background:#fff;display:grid;place-items:center;position:relative;border:1px solid #d5d5d5;border-radius:8px;overflow:hidden;touch-action:pan-y;user-select:none}
+#latest-design .dfm-stage{min-height:450px}
+.dfm-stage .dfm-model-stage{aspect-ratio:5 / 6;position:relative;width:min(100%,380px);background:#fff}
+.dfm-model-stage img[data-dfm-person]{width:100%;height:100%;object-fit:contain;display:block;position:absolute;inset:0}
+.dfm-model-stage img[data-dfm-print]{position:absolute;object-fit:contain;pointer-events:none;filter:drop-shadow(0 0 1px rgba(0,0,0,.45));mix-blend-mode:normal;height:auto}
+.dfm-stage-nav{display:flex;justify-content:center;align-items:center;gap:1rem;margin:.6rem auto}
+.dfm-stage-nav button{border:1px solid #63725c;background:#a2d49c;color:#142014;cursor:pointer;border-radius:50%;font-size:1.25rem;width:42px;height:42px}
+.dfm-stage-nav span{font-size:.91rem;min-width:65px;text-align:center}
+.dfm-preview-note,.dfm-no-checkout,.dfm-availability{font-size:.8rem;color:#c6c7ba;line-height:1.5;margin:.4rem 0}
+.dfm-preview-note{text-align:center}
+.dfm-purchase-panel{padding:1.1rem;background:#22241e;border:1px solid #465044;border-radius:9px}
+.dfm-label{color:#a2d49c!important;letter-spacing:.11em;text-transform:uppercase;font-size:.73rem;font-weight:800}
+.dfm-purchase-panel h3{font-size:clamp(1.3rem,2.4vw,2rem);line-height:1.15;margin:.45rem 0 .85rem}
+.dfm-controls-group{margin:1rem 0}
+.dfm-control-label{display:block;font-size:.92rem;font-weight:700;margin-bottom:.5rem;color:#f5e5c5}
+.dfm-model-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}
+.dfm-model-options button{background:#292d27;color:#f1ebdf;border:1px solid #707568;font:inherit;font-size:.78rem;padding:.55rem .35rem;border-radius:5px;text-align:center;cursor:pointer}
+.dfm-model-options button[aria-pressed="true"]{border:2px solid #a2d49c;background:#324a35;color:#fff}
+.dfm-colors{display:flex;flex-wrap:wrap;gap:.6rem}
+.dfm-colors button{display:inline-flex;align-items:center;gap:.5rem;font:inherit;font-size:.85rem;background:transparent;color:#eee;cursor:pointer;padding:.38rem .65rem;border:1px solid #59604e;border-radius:6px}
+.dfm-colors button[aria-pressed="true"]{border:2px solid #a2d49c}
+.dfm-swatch{border:1px solid #959595;width:19px;height:19px;border-radius:50%;flex:none}
+.dfm-controls-group select{width:100%;max-width:220px;border:1px solid #858577;background:#151613;color:#fff;padding:.65rem;font:inherit;border-radius:5px}
+.dfm-actions{margin:1.25rem 0}
+.dfm-artwork-preview{margin-top:1.2rem;display:grid;grid-template-columns:minmax(140px,.3fr) minmax(0,1fr);gap:1rem;align-items:center;border:1px solid #515950;border-radius:9px;background:#121311;padding:1.1rem}
+.dfm-artwork-preview img{display:block;width:100%;max-height:280px;object-fit:contain;background:#000;border-radius:5px}
+.dfm-previous{border-top:1px solid #41473a;margin-top:2.7rem;padding-top:2.2rem}
+.dfm-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1.25rem}
+.dfm-catalog-card{background:#22241e;padding:0;border:1px solid #454c40;border-radius:7px;overflow:hidden;display:flex;flex-direction:column}
+.dfm-catalog-card button{width:100%;padding:0;border:0;display:block;cursor:pointer;background:#000}
+.dfm-catalog-card img{display:block;width:100%;aspect-ratio:1.5;object-fit:contain;background:#000}
+.dfm-card-body{padding:.9rem;display:flex;flex-direction:column;flex:1;gap:.65rem}
+.dfm-card-body h4{margin:0;font-size:.98rem}
+.dfm-card-body button{width:auto;align-self:flex-start;color:#142014;background:#a2d49c;font-weight:800;font-size:.8rem;padding:.6rem .8rem;border-radius:5px}
+.dfm-dialog{color:#f5e5c5;background:#1b1e19;border:1px solid #6b7d5d;border-radius:12px;width:min(96vw,970px);max-height:92vh;overflow:auto;padding:1rem}
+.dfm-dialog::backdrop{background:rgba(0,0,0,.85)}
+.dfm-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.9rem}
+.dfm-dialog-head h2{margin:0;font-size:clamp(1.3rem,3.3vw,2rem)}
+.dfm-dialog-head .dfm-x{border:0;background:#a2d49c;color:#122014;font-size:1.2rem;cursor:pointer;padding:.4rem .65rem;border-radius:6px}
+.dfm-dialog-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(255px,.8fr);gap:1rem}
+.dfm-dialog .dfm-stage{min-height:460px}
+.dfm-dialog-options img[data-dfm-art]{display:block;width:100%;max-height:150px;object-fit:contain;background:#000;margin-top:1rem}
+.dfm-dialog-options p{font-size:.86rem}
+.dfm-dialog .dfm-size-guide{border-top:1px solid #41473a;padding-top:.8rem}
+@media(max-width:800px){#latest-design .dfm-feature{grid-template-columns:1fr}.dfm-dialog-columns{grid-template-columns:1fr}#latest-design .dfm-stage,.dfm-dialog .dfm-stage{min-height:0}.dfm-stage .dfm-model-stage{width:min(100%,440px)}.dfm-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){.dfm-catalog{grid-template-columns:1fr}.dfm-artwork-preview{grid-template-columns:1fr}.dfm-model-options{grid-template-columns:repeat(2,minmax(0,1fr))}.dfm-dialog{padding:.7rem;width:99vw}.dfm-model-stage img[data-dfm-print]{max-height:45%}}
