@@ -141,7 +141,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 #latest-design h2{font-size:clamp(2.1rem,5vw,3.8rem);line-height:1.03;margin:.5rem 0 1rem}
 #latest-design .df-blurb{max-width:65ch;color:#c6c8bc}
 #latest-design .df-showcase{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.4rem 0}
-#latest-design .df-photo{border:1px solid #4b5148;border-radius:9px;overflow:hidden;background:#f8f7f4;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;min-width:0}
+#latest-design .df-photo{border:1px solid #4b5148;border-radius:9px;overflow:hidden;background:#fff;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;min-width:0}
 #latest-design .df-photo img{display:block;width:100%;height:100%;object-fit:contain}
 #latest-design .df-photo.df-shirt{background:#111}
 #latest-design .df-photo.df-shirt img{width:100%;height:100%;max-width:100%;object-fit:contain;flex:none;align-self:center}
@@ -173,15 +173,15 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 #df-bike-modal select{display:block;background:#10130f;color:white;width:100%;padding:.65rem;border:1px solid #76856c;border-radius:4px;margin-top:.25rem;font:inherit}
 #df-bike-modal .df-footnote{margin:1rem 0;font-size:.9rem}
 #df-bike-modal a{color:#a2d49c}
-@media(max-width:600px){#latest-design .df-showcase{gap:.4rem}#latest-design .df-photo{aspect-ratio:3/4}#latest-design .df-three{gap:.4rem}#latest-design .df-item{padding:.3rem}#latest-design .df-item h3{font-size:.78rem}#latest-design .df-item p{font-size:.67rem}#latest-design .df-item .df-button{font-size:.65rem;padding:.35rem .2rem;width:100%}#df-bike-modal .df-pick{flex-basis:68px}#df-bike-modal .df-pick img{height:55px}}
+@media(max-width:600px){#latest-design .df-showcase{gap:.4rem}#latest-design .df-photo{aspect-ratio:4/5}#latest-design .df-three{gap:.4rem}#latest-design .df-item{padding:.3rem}#latest-design .df-item h3{font-size:.78rem}#latest-design .df-item p{font-size:.67rem}#latest-design .df-item .df-button{font-size:.65rem;padding:.35rem .2rem;width:100%}#df-bike-modal .df-pick{flex-basis:68px}#df-bike-modal .df-pick img{height:55px}}
 </style>
 <section class="wrap" id="latest-design" aria-labelledby="latest-design-title">
 <p class="df-label">Latest ride · latest T-shirt</p>
 <h2 id="latest-design-title">Moto Guzzi Arancia Meccanica · 2018</h2>
 <p class="df-blurb">A one-of-a-kind Moto Guzzi, faithfully reproduced as a classic chest-sized motorcycle print. T-shirt on the left, artwork only on the right.</p>
 <div class="df-showcase">
-<div class="df-photo df-shirt"><img src="assets/guzzi-tee.webp" alt="Moto Guzzi Arancia Meccanica chest print on a black T-shirt" loading="eager"></div>
-<div class="df-photo"><img src="assets/guzzi-art.webp" alt="Moto Guzzi Arancia Meccanica design art with year and Dave Ferry Motors website" loading="eager"></div>
+<div class="df-photo df-shirt"><img src="assets/guzzi-tee-final.webp" alt="Moto Guzzi Arancia Meccanica chest print on a black T-shirt" loading="eager"></div>
+<div class="df-photo"><img src="assets/guzzi-art-final.webp" alt="Moto Guzzi Arancia Meccanica design art with year and Dave Ferry Motors website" loading="eager"></div>
 </div>
 <div class="df-controls"><button class="df-button" type="button" data-df-product="guzzi">View T-shirt on men &amp; women</button><button class="df-button df-link-button" type="button" data-df-product="guzzi" data-photo="1">Enlarge artwork</button><span class="df-muted">Design preview · Orders are not open yet</span></div>
 <div class="df-previous" id="previous-designs"><p class="df-label">Earlier designs</p><h3>Three more motorcycles</h3><p class="df-blurb">Explore the motorcycle art, T-shirt and available model previews.</p>
@@ -193,7 +193,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 <dialog id="df-bike-modal" aria-labelledby="df-modal-heading">
 <div class="df-modal-head"><h2 id="df-modal-heading">Motorcycle T-shirt</h2><button type="button" id="df-modal-close" class="df-modal-close" aria-label="Close">✕</button></div>
 <p id="df-modal-description"></p>
-<div class="df-stage"><img id="df-stage-photo" src="assets/guzzi-tee.webp" alt="T-shirt design enlarged"></div>
+<div class="df-stage"><img id="df-stage-photo" src="assets/guzzi-tee-final.webp" alt="T-shirt design enlarged"></div>
 <div id="df-filmstrip" class="df-filmstrip" aria-label="Gallery thumbnails"></div>
 <div class="df-selectors"><label>Style<select id="df-style"><option>Men's T-shirt</option><option>Women's T-shirt</option></select></label><label>Size<select id="df-size-select"><option value="">Choose size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>2XL</option></select></label></div>
 <p class="df-footnote">These are concepts, not a live inventory or checkout. Print availability and sizing will be confirmed by our supplier. <a href="https://spprint.be/size-chart" target="_blank" rel="noopener noreferrer">Official SP Print size guide</a>.</p>
@@ -201,7 +201,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 <script id="df-merch-script">
 (function(){
 const data={
-guzzi:{title:'Moto Guzzi Arancia Meccanica · 2018',about:'A low-slung, custom 1150cc Moto Guzzi in orange and gold. View the art, the chest print and four different fits.',pics:[['assets/guzzi-tee.webp','Black T-shirt only'],['assets/guzzi-art.webp','Artwork only'],['assets/moto-guzzi-model-bearded.webp','Bearded, broad-built man'],['assets/moto-guzzi-model-athletic.webp','Athletic young man'],['assets/moto-guzzi-model-curvy.webp','Curvy woman'],['assets/guzzi-model-bangs.webp','Young woman with dark fringe']]},
+guzzi:{title:'Moto Guzzi Arancia Meccanica · 2018',about:'A low-slung, custom Moto Guzzi in orange and gold. See the clean motorcycle artwork and the T-shirt photographed on four different adult models, all on white backgrounds.',pics:[['assets/guzzi-tee-final.webp','Black T-shirt only'],['assets/guzzi-art-final.webp','Motorcycle artwork only'],['assets/guzzi-model-senior-man.webp','Older man with a long beard'],['assets/guzzi-model-athletic-final.webp','Athletic young man'],['assets/guzzi-model-mature-woman.webp','Mature woman'],['assets/guzzi-model-fringe-final.webp','Dark-haired woman with bangs']]},
 nsu:{title:'NSU 501T · 1938',about:'Conservative heritage motorcycle art, with a subtle black-and-red palette.',pics:[['assets/nsu-tee.webp','Black T-shirt only'],['assets/nsu-art.webp','Artwork only']]},
 henderson:{title:'Henderson Deluxe · 1928',about:'Period-inspired American inline-four motorcycle artwork.',pics:[['assets/henderson-motorcycle.png','Black T-shirt preview','left'],['assets/henderson-motorcycle.png','Motorcycle artwork only','right'],['assets/henderson-motorcycle-models.png','Model previews'],['assets/henderson-engine.png','Engine illustration']]},
 nightrod:{title:'Harley-Davidson Night Rod · 2010',about:'Green Bozzies Custom Night Rod with its unmistakable rear tire.',pics:[['assets/night-rod-green.webp','Black T-shirt preview','left'],['assets/night-rod-green.webp','Motorcycle artwork only','right']]}
