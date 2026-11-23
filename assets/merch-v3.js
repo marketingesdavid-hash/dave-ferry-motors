@@ -61,6 +61,7 @@ document.querySelectorAll('[data-dfm-details]').forEach(b=>b.addEventListener('c
 document.querySelectorAll('[data-dfm-close]').forEach(b=>b.addEventListener('click',()=>dialog.close()));
 cards.addEventListener('click',e=>{const b=e.target.closest('[data-dfm-pick]');if(b)setProduct(b.dataset.dfmPick,true);});
 dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});
+dialog.addEventListener('close',()=>{setProduct(products[0].id,false);});
 function registerSwipe(stage){let x=null;stage.addEventListener('touchstart',e=>{x=e.changedTouches[0].clientX;},{passive:true});stage.addEventListener('touchend',e=>{if(x===null)return;const diff=e.changedTouches[0].clientX-x;x=null;if(Math.abs(diff)>38)setModel(modelIndex+(diff<0?1:-1));},{passive:true});}
 document.querySelectorAll('[data-dfm-stage]').forEach(registerSwipe);
 document.addEventListener('keydown',e=>{if(!dialog.open)return;if(e.key==='ArrowLeft')setModel(modelIndex-1);if(e.key==='ArrowRight')setModel(modelIndex+1);});
