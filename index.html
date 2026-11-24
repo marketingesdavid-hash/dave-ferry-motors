@@ -301,13 +301,39 @@ function prepareOriginalGuzzi(){
  const p=products.find(item=>item.key==='guzzi');if(!p)return;
  const img=new Image();img.onload=()=>{
   try{
-   const canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=Math.round(img.naturalHeight*.73);
-   const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0);
-   const data=ctx.getImageData(0,0,canvas.width,canvas.height),v=data.data;
-   for(let i=0;i<v.length;i+=4){const lum=Math.max(v[i],v[i+1],v[i+2]);v[i+3]=Math.round(255*Math.max(0,Math.min(1,(lum-15)/35)))}
-   ctx.putImageData(data,0,0);p.print=canvas.toDataURL('image/png');
-   document.querySelectorAll('.dfm3-print img[src="assets/guzzi-art-final.webp"]').forEach(el=>el.src=p.print);
-  }catch(e){/* Keep approved art as the original fallback */}
+   const w=img.naturalWidth,h=img.naturalHeight;
+   // The original portrait artwork has the motorcycle in the middle, above its old lettering.
+   const sy=Math.floor(h*.23),sh=Math.ceil(h*.355);
+   const bike=document.createElement('canvas');bike.width=w;bike.height=sh;
+   const ctx=bike.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,sy,w,sh,0,0,w,sh);
+   const data=ctx.getImageData(0,0,w,sh),v=data.data;
+   for(let i=0;i<v.length;i+=4){
+    const r=v[i],g=v[i+1],b=v[i+2],lo=Math.min(r,g,b),hi=Math.max(r,g,b);
+    // Remove neutral white background, including the open areas between the spokes.
+    const alpha=1-Math.max(0,Math.min(1,(lo-212)/35))*Math.max(0,Math.min(1,(28-(hi-lo))/18));
+    v[i+3]=Math.round(v[i+3]*alpha);
+   }
+   ctx.putImageData(data,0,0);
+   const out=document.createElement('canvas');out.width=w;out.height=sh+Math.round(w*.23);
+   const a=out.getContext('2d');a.drawImage(bike,0,0);
+   a.textAlign='right';a.textBaseline='top';a.fillStyle='#f5e9d0';a.strokeStyle='#171717';a.lineJoin='round';a.lineWidth=w*.0045;
+   const right=w*.96;
+   function line(text,y,size,italic=false){
+    a.font=(italic?'italic ':'')+'bold '+Math.round(w*size)+'px Georgia, serif';
+    a.strokeText(text,right,y,w*.93);a.fillText(text,right,y,w*.93);
+   }
+   line('MOTO GUZZI',sh+w*.006,.059);
+   line('Arancia Meccanica',sh+w*.067,.058,true);
+   line('2018',sh+w*.128,.048);
+   line('daveferrymotors.com',sh+w*.181,.032,true);
+   const old=p.art,next=out.toDataURL('image/png');p.art=next;p.print=next;p.fullPrint=true;
+   document.querySelectorAll('img').forEach(el=>{
+    if(el.getAttribute('src')!==old)return;
+    el.src=next;
+    const print=el.closest('.dfm3-print');
+    if(print)print.querySelectorAll('.dfm3-print-name,.dfm3-print-domain').forEach(label=>label.remove());
+   });
+  }catch(e){console.warn('Moto Guzzi artwork preparation failed',e)}
  };img.src=p.art;
 }
 // Use the approved transparent, self-lettered image once it is uploaded.
