@@ -249,7 +249,7 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 </style>
 <section class="wrap dfm3-section" id="latest-design" aria-labelledby="latest-design-title">
 <span id="shirts"></span><p class="dfm3-label">Latest ride · riding apparel</p><h2 id="latest-design-title">Henderson De Luxe “Phenix” · 1928</h2>
-<p class="dfm3-muted">Choose a T-shirt or hoodie, select black, white or grey, then swipe through Jack, Sophie, George and Emma. Each preview shows the selected motorcycle print on the chest.</p>
+<p class="dfm3-muted">Choose your model, garment and colour, then swipe through motorcycle designs. The selected print appears on the chest.</p>
 <div class="dfm3-feature"><div id="dfm3-feature-gallery" class="dfm3-gallery"></div><div id="dfm3-feature-detail" class="dfm3-detail"></div></div>
 <div class="dfm3-subhead"><p class="dfm3-label">Previous designs</p><h3>Three more motorcycles</h3><div id="dfm3-previous" class="dfm3-previous"></div></div>
 <div class="dfm3-subhead"><p class="dfm3-label">The collection</p><h3>More motorcycle apparel designs</h3><p class="dfm3-muted">Each design opens the same garment, model, colour and size selector. New designs move to the front of the collection.</p><div id="dfm3-archive" class="dfm3-archive"></div></div>
@@ -262,6 +262,24 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 .dfm3-portrait .dfm3-base{object-fit:contain}
 .dfm3-portrait .dfm3-print{z-index:1}
 .dfm3-portrait .dfm3-print img{filter:none}
+
+.dfm3-stage,#dfm3-modal .dfm3-stage{width:min(100%,390px);background:#fff}
+.dfm3-portrait{width:100%;max-width:none;aspect-ratio:596/653}
+.dfm3-portrait>img.dfm3-base{object-fit:fill}
+.dfm3-portrait .dfm3-print{left:var(--chest-left,50%);top:var(--chest-top);width:var(--chest-width)}
+.dfm3-portrait .dfm3-print img{width:100%;max-height:none;aspect-ratio:auto}
+.dfm3-portrait .dfm3-print-name{font-size:clamp(5px,.7vw,8px)}
+.dfm3-design-label{font-size:.82rem;font-weight:750;margin:.1rem 0 .35rem;color:#e5e0d3}
+.dfm3-design-strip{display:flex;gap:.45rem;overflow-x:auto;scroll-snap-type:x proximity;padding:.15rem .1rem .5rem;overscroll-behavior-inline:contain;scrollbar-width:thin}
+.dfm3-design-strip button{flex:0 0 88px;min-width:0;scroll-snap-align:start;padding:.25rem;border:2px solid #4b5d4a;border-radius:7px;background:#171a16;color:#f5e5c5;cursor:pointer;text-align:left;font:inherit}
+.dfm3-design-strip button[aria-pressed="true"]{border-color:#a2d49c;background:#29352a}
+.dfm3-design-strip img{display:block;width:100%;height:49px;object-fit:contain;background:#090a08;border-radius:3px}
+.dfm3-design-strip span{display:block;font-size:.62rem;line-height:1.1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin:.2rem 0}
+.dfm3-stage-counter{padding:.35rem 0}
+.dfm3-garments{margin:.35rem 0 .45rem}.dfm3-garments button{padding:.45rem}
+.dfm3-mini-models{margin:.35rem 0 .45rem}.dfm3-mini-models button{min-height:39px}
+.dfm3-colors{margin:.35rem 0 .7rem}
+@media(max-width:600px){.dfm3-stage,#dfm3-modal .dfm3-stage{width:min(100%,272px)}.dfm3-carousel-btn{width:33px;height:38px;font-size:1.6rem}.dfm3-design-strip button{flex-basis:73px}.dfm3-design-strip img{height:41px}.dfm3-portrait .dfm3-print-name{font-size:5px}.dfm3-portrait .dfm3-print-domain{font-size:4px}}
 </style>
 <script id="dfm3-unified-merch-script">
 (()=>{
@@ -293,10 +311,11 @@ function prepareOriginalGuzzi(){
  };img.src=p.art;
 }
 prepareOriginalGuzzi();
-const models=[{key:'jack',legacy:'athletic',label:'Jack',legacyTop:'36%',legacyWidth:'43%'},{key:'sophie',legacy:'blonde',label:'Sophie',legacyTop:'24%',legacyWidth:'31%'},{key:'george',legacy:'older',label:'George',legacyTop:'36%',legacyWidth:'41%'},{key:'emma',legacy:'curvy',label:'Emma',legacyTop:'37%',legacyWidth:'39%'}];
+const models=[{"key":"jack","legacy":"athletic","label":"Jack","legacyTop":"42%","legacyWidth":"32%","t":{"box":[12,12,584,625],"print":[50,43,34],"poly":[[124,376],[129,302],[163,252],[240,211],[249,209],[261,232],[300,240],[335,229],[343,208],[401,233],[440,264],[465,310],[471,369],[414,385],[399,438],[407,570],[364,595],[235,599],[197,573],[201,455],[181,384]]},"h":{"box":[12,20,584,614],"print":[50,53,31],"poly":[[111,407],[120,322],[154,269],[215,235],[211,208],[230,181],[253,182],[264,218],[300,246],[327,220],[346,181],[372,190],[388,216],[382,239],[442,266],[471,308],[487,401],[477,492],[440,548],[414,551],[396,535],[377,547],[359,585],[227,585],[210,546],[185,529],[165,546],[138,514],[115,451]]}},{"key":"sophie","legacy":"blonde","label":"Sophie","legacyTop":"45%","legacyWidth":"27%","t":{"box":[12,60,584,601],"print":[55,46,27],"poly":[[157,340],[166,302],[181,270],[216,254],[243,269],[277,268],[317,265],[353,242],[405,265],[432,285],[453,337],[403,360],[392,421],[398,524],[365,551],[344,569],[249,570],[209,551],[206,474],[214,397],[207,355]]},"h":{"box":[12,66,584,595],"print":[54,53,27],"poly":[[134,425],[153,349],[167,301],[197,277],[220,255],[246,261],[282,273],[313,265],[352,236],[400,258],[432,285],[449,341],[481,435],[464,494],[432,540],[402,552],[389,535],[370,534],[344,577],[245,577],[220,538],[196,532],[179,552],[152,524],[137,477]]}},{"key":"george","legacy":"older","label":"George","legacyTop":"42%","legacyWidth":"35%","t":{"box":[12,12,584,630],"print":[50,43,35],"poly":[[104,374],[126,302],[163,251],[238,205],[250,220],[273,238],[320,239],[345,224],[355,201],[413,225],[453,256],[481,303],[501,375],[434,398],[426,442],[429,552],[398,588],[367,608],[229,611],[183,577],[185,481],[169,397]]},"h":{"box":[12,12,584,630],"print":[50,52,33],"poly":[[96,419],[109,337],[135,289],[180,246],[206,229],[202,205],[223,173],[250,176],[264,211],[302,244],[332,221],[350,173],[372,185],[392,208],[386,232],[445,261],[480,309],[502,361],[511,435],[493,501],[459,560],[429,581],[410,555],[388,557],[370,589],[364,606],[234,606],[213,565],[188,552],[162,573],[135,547],[111,493]]}},{"key":"emma","legacy":"curvy","label":"Emma","legacyTop":"45%","legacyWidth":"33%","t":{"box":[12,66,584,593],"print":[50,45,32],"poly":[[138,348],[150,302],[178,265],[219,241],[252,244],[282,263],[320,265],[348,242],[385,239],[424,255],[450,290],[475,349],[417,374],[415,441],[423,530],[390,550],[359,569],[254,569],[213,555],[188,535],[204,440],[198,374]]},"h":{"box":[12,74,584,588],"print":[50,52,31],"poly":[[116,425],[134,347],[152,301],[179,265],[219,242],[241,226],[264,246],[297,258],[327,246],[352,225],[385,240],[427,263],[459,302],[480,352],[500,421],[484,490],[455,539],[425,553],[402,531],[383,543],[354,573],[244,573],[217,542],[193,524],[168,548],[143,523],[125,477]]}}];
 const colors=[{key:'black',label:'Black',hex:'#171717'},{key:'white',label:'White',hex:'#fff'},{key:'gray',label:'Grey',hex:'#898989'}];
 const garments=[{key:'tshirt',label:'T-shirt'},{key:'hoodie',label:'Hoodie'}];
 const stateMap=new WeakMap();
+const portraitCache=new Map(),baseCache=new Map();
 // Images are stored as compact base64 WebP/PNG wrapped in local SVG text files.
 // Some browsers block nested raster rendering inside SVG <img>; unwrap on load.
 const imageUrlCache=new Map();
@@ -308,18 +327,70 @@ function hydrateImages(root){
  });
 }
 
-function stageHtml(p,st){const m=models[st.m],c=colors[st.c],g=garments[st.g];const fabricSrc=`assets/approved/models/${m.key}-${g.key}-${c.key}.webp`;const legacySrc=`assets/dfm-model-${m.legacy}-${c.key}.svg`;const ink=c.key==='black'?'#f5e9d0':'#1d1e1b';return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different models"><div class="dfm3-portrait"><img class="dfm3-base" src="${fabricSrc}" data-fallback-src="${legacySrc}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" loading="eager" draggable="false"><div class="dfm3-print" style="--chest-top:31%;--chest-width:31%;--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false"><span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span></div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous model">‹</button><button class="dfm3-carousel-btn next" type="button" aria-label="Next model">›</button></div><div class="dfm3-stage-counter" aria-live="polite">${st.m+1} / 4 · ${m.label} · ${c.label} ${g.label}</div>`}
-function galleryHtml(p,st){return stageHtml(p,st)+`<div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>`}
-function detailHtml(p,st,modal=false){return `<img class="dfm3-art" src="${p.art}" alt="Approved design artwork for ${p.title}" loading="lazy"><p class="dfm3-label">Motorcycle apparel design</p><h3>${p.title}</h3><p class="dfm3-muted">${p.story}</p><label class="dfm3-size-label" for="${modal?'dfm3-size-modal':'dfm3-size-home'}">Choose clothing size</label><select id="${modal?'dfm3-size-modal':'dfm3-size-home'}" class="dfm3-size"><option value="">Select size</option>${['XS','S','M','L','XL','2XL','3XL'].map(v=>`<option value="${v}" ${v===st.size?'selected':''}>${v}</option>`).join('')}</select><button class="dfm3-cta" type="button" data-action="enquiry">Prepare an order enquiry</button><p class="dfm3-foot">The 4-model, 3-colour gallery is a digitally composed print-placement preview, not a production photograph. Sizes and shirt stock require confirmation with our printer; online payments are not enabled yet.</p><p class="dfm3-foot"><a href="https://spprint.be/" target="_blank" rel="noopener noreferrer">Printing partner: SP Print</a></p><p class="dfm3-foot dfm3-order-status" aria-live="polite"></p>`}
-function mount(gallery,detail,p){const existing=stateMap.get(gallery);const st=existing&&existing.p.key===p.key?existing.st:{m:0,c:0,g:0,size:''};stateMap.set(gallery,{p,st,detail});
- function redraw(){gallery.innerHTML=galleryHtml(p,st);gallery.querySelectorAll('img[data-fallback-src]').forEach(img=>{img.addEventListener('error',()=>{if(img.dataset.fallbackTried)return;img.dataset.fallbackTried='1';img.src=img.dataset.fallbackSrc;const print=img.closest('.dfm3-portrait').querySelector('.dfm3-print');const m=models[st.m];print.style.setProperty('--chest-top',m.legacyTop);print.style.setProperty('--chest-width',m.legacyWidth);img.alt+=' — preview image pending';},{once:true})});hydrateImages(gallery);let s=detail.querySelector('.dfm3-size');if(s)st.size=s.value;}
- detail.innerHTML=detailHtml(p,st,detail.closest('dialog')!==null);hydrateImages(detail);
- const update=()=>{redraw();};
- gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else if(b.matches('.next'))st.m=(st.m+1)%4;else if(b.matches('.prev'))st.m=(st.m+3)%4;else return;update()});
- let touchX=null;gallery.addEventListener('touchstart',e=>{if(e.target.closest('.dfm3-stage'))touchX=e.changedTouches[0].screenX},{passive:true});gallery.addEventListener('touchend',e=>{if(touchX===null)return;let dx=e.changedTouches[0].screenX-touchX;touchX=null;if(Math.abs(dx)>42){st.m=(st.m+(dx<0?1:3))%4;update()}},{passive:true});
- detail.querySelector('select').addEventListener('change',e=>{st.size=e.target.value});
- detail.querySelector('[data-action="enquiry"]').addEventListener('click',()=>{const text=`Dave Ferry Motors – apparel enquiry\nMotorcycle: ${p.title}\nGarment: ${garments[st.g].label}\nModel: ${models[st.m].label}\nColour: ${colors[st.c].label}\nSize: ${st.size||'Please select size'}`;const msg=detail.querySelector('.dfm3-order-status');if(!st.size){msg.textContent='Please choose a size first.';return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>msg.textContent='Selection copied. Please send it to us via the contact or social links below.').catch(()=>msg.textContent=text)}else{msg.textContent=text} });
- redraw();
+function stageHtml(p,st){
+ const m=models[st.m],c=colors[st.c],g=garments[st.g],a=st.g?m.h:m.t;
+ const src=`assets/approved/models/${m.key}-${g.key}-gray.webp`;
+ const ink=c.key==='black'?'#f5e9d0':'#1d1e1b';
+ return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print" style="--chest-left:${a.print[0]}%;--chest-top:${a.print[1]}%;--chest-width:${a.print[2]}%;--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false"><span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span></div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design">‹</button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design">›</button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}</div>`;
+}
+function galleryHtml(p,st){
+ return stageHtml(p,st)+`<div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>`;
+}
+function recolorPortrait(m,g,c){
+ const key=m.key+'-'+g.key+'-'+c.key;
+ if(portraitCache.has(key))return portraitCache.get(key);
+ const a=g.key==='hoodie'?m.h:m.t;
+ const src=`assets/approved/models/${m.key}-${g.key}-gray.webp`;
+ let pending=baseCache.get(src);
+ if(!pending){pending=new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src});baseCache.set(src,pending);}
+ const task=pending.then(im=>{
+  const canvas=document.createElement('canvas');canvas.width=im.naturalWidth;canvas.height=im.naturalHeight;
+  const ctx=canvas.getContext('2d',{willReadFrequently:true}),w=canvas.width,h=canvas.height,sx=w/596,sy=h/653;
+  ctx.drawImage(im,0,0);const [x1,y1,x2,y2]=a.box;ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,w,Math.round(y1*sy));ctx.fillRect(0,Math.round(y2*sy),w,h);ctx.fillRect(0,0,Math.round(x1*sx),h);ctx.fillRect(Math.round(x2*sx),0,w,h);
+  if(c.key!=='gray'){
+   const mask=document.createElement('canvas');mask.width=w;mask.height=h;const mc=mask.getContext('2d');mc.beginPath();a.poly.forEach(([x,y],i)=>i?mc.lineTo(x*sx,y*sy):mc.moveTo(x*sx,y*sy));mc.closePath();mc.fill();
+   const alpha=mc.getImageData(0,0,w,h).data, pixels=ctx.getImageData(0,0,w,h),d=pixels.data;
+   const clamp=v=>Math.max(0,Math.min(1,v));
+   for(let i=0;i<d.length;i+=4){if(!alpha[i+3])continue;const r=d[i],gg=d[i+1],b=d[i+2],l=.2126*r+.7152*gg+.0722*b,ch=Math.max(r,gg,b)-Math.min(r,gg,b);
+    const weight=alpha[i+3]/255*clamp((32-ch)/20)*clamp((242-l)/22)*clamp((l-40)/35);
+    if(!weight)continue;
+    const target=c.key==='black'?Math.min(93,Math.max(10,l*.42-26)):Math.max(45,Math.min(250,255-(255-l)*.30));
+    d[i]=r+(target-r)*weight;d[i+1]=gg+(target-gg)*weight;d[i+2]=b+(target-b)*weight;
+   }ctx.putImageData(pixels,0,0);
+  }
+  return canvas.toDataURL('image/png');
+ }).catch(err=>{portraitCache.delete(key);throw err;});
+ portraitCache.set(key,task);return task;
+}
+function detailHtml(p,st,modal=false){return `<img class="dfm3-art" src="${p.art}" alt="Approved design artwork for ${p.title}" loading="lazy"><p class="dfm3-label">Motorcycle apparel design</p><h3>${p.title}</h3><p class="dfm3-muted">${p.story}</p><label class="dfm3-size-label" for="${modal?'dfm3-size-modal':'dfm3-size-home'}">Choose clothing size</label><select id="${modal?'dfm3-size-modal':'dfm3-size-home'}" class="dfm3-size"><option value="">Select size</option>${['XS','S','M','L','XL','2XL','3XL'].map(v=>`<option value="${v}" ${v===st.size?'selected':''}>${v}</option>`).join('')}</select><button class="dfm3-cta" type="button" data-action="enquiry">Prepare an order enquiry</button><p class="dfm3-foot">The 4-model gallery uses digitally recoloured garments and a separate print-placement preview, not a production photograph. Sizes and shirt stock require confirmation with our printer; online payments are not enabled yet.</p><p class="dfm3-foot"><a href="https://spprint.be/" target="_blank" rel="noopener noreferrer">Printing partner: SP Print</a></p><p class="dfm3-foot dfm3-order-status" aria-live="polite"></p>`}
+function mount(gallery,detail,p){
+ const st={m:0,c:0,g:0,size:'',d:products.indexOf(p)};stateMap.set(gallery,{p,st,detail});
+ const modal=detail.closest('dialog')!==null;
+ function renderDetail(){
+  detail.innerHTML=detailHtml(p,st,modal);hydrateImages(detail);
+  detail.querySelector('select').addEventListener('change',e=>{st.size=e.target.value});
+  detail.querySelector('[data-action="enquiry"]').addEventListener('click',()=>{
+   const text=`Dave Ferry Motors – apparel enquiry\nMotorcycle: ${p.title}\nGarment: ${garments[st.g].label}\nModel: ${models[st.m].label}\nColour: ${colors[st.c].label}\nSize: ${st.size||'Please select size'}`;
+   const msg=detail.querySelector('.dfm3-order-status');if(!st.size){msg.textContent='Please choose a size first.';return}
+   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>msg.textContent='Selection copied. Please send it to us via the contact or social links below.').catch(()=>msg.textContent=text)}else{msg.textContent=text}
+  });
+  if(modal)detail.closest('dialog').querySelector('#dfm3-modal-title').textContent=p.title;
+ }
+ function redraw(){
+  const oldStrip=gallery.querySelector('.dfm3-design-strip'),left=oldStrip?oldStrip.scrollLeft:0;
+  gallery.innerHTML=galleryHtml(p,st);
+  const strip=gallery.querySelector('.dfm3-design-strip');strip.scrollLeft=left;
+  const chosen=strip.querySelector('[aria-pressed="true"]');if(chosen){const b=chosen.getBoundingClientRect(),s=strip.getBoundingClientRect();if(b.left<s.left)strip.scrollLeft-=s.left-b.left+4;else if(b.right>s.right)strip.scrollLeft+=b.right-s.right+4}
+  const img=gallery.querySelector('.dfm3-base'),m=models[st.m],g=garments[st.g],c=colors[st.c];img.style.visibility='hidden';
+  recolorPortrait(m,g,c).then(url=>{if(!img.isConnected)return;img.src=url;img.style.visibility='visible'}).catch(()=>{if(!img.isConnected)return;img.src=`assets/approved/models/${m.key}-${g.key}-${c.key}.webp`;img.style.visibility='visible';img.addEventListener('error',()=>{if(img.dataset.failed)return;img.dataset.failed='1';img.alt='Selected preview unavailable';img.closest('.dfm3-portrait').querySelector('.dfm3-print').hidden=true},{once:true})});
+  hydrateImages(gallery);
+ }
+ function changeDesign(i){st.d=(i+products.length)%products.length;p=products[st.d];stateMap.get(gallery).p=p;renderDetail();redraw()}
+ gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.design!==undefined){changeDesign(+b.dataset.design);return}if(b.matches('.next')){changeDesign(st.d+1);return}if(b.matches('.prev')){changeDesign(st.d-1);return}if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else return;redraw()});
+ let touch=null;gallery.addEventListener('touchstart',e=>{if(e.target.closest('.dfm3-stage'))touch=[e.changedTouches[0].screenX,e.changedTouches[0].screenY]},{passive:true});
+ gallery.addEventListener('touchend',e=>{if(!touch)return;const dx=e.changedTouches[0].screenX-touch[0],dy=e.changedTouches[0].screenY-touch[1];touch=null;if(Math.abs(dx)>42&&Math.abs(dx)>Math.abs(dy)*1.3)changeDesign(st.d+(dx<0?1:-1))},{passive:true});gallery.addEventListener('touchcancel',()=>{touch=null},{passive:true});
+ renderDetail();redraw();
 }
 function card(p){return `<article class="dfm3-card"><button type="button" data-open-product="${p.key}" aria-label="View ${p.title}"><img src="${p.art}" alt="${p.title} motorcycle T-shirt graphic" loading="lazy"></button><h3>${p.title}</h3><button class="dfm3-cta" type="button" data-open-product="${p.key}">View models &amp; colours</button></article>`}
 const f=products[0];document.getElementById('latest-design-title').textContent=f.title;mount(document.getElementById('dfm3-feature-gallery'),document.getElementById('dfm3-feature-detail'),f);
