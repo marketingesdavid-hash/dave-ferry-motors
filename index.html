@@ -268,7 +268,9 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 .dfm3-portrait>img.dfm3-base{object-fit:fill}
 .dfm3-portrait .dfm3-print{left:var(--chest-left,50%);top:var(--chest-top);width:var(--chest-width)}
 .dfm3-portrait .dfm3-print img{width:100%;max-height:none;aspect-ratio:auto}
-.dfm3-portrait .dfm3-print-name{font-size:clamp(5px,.7vw,8px)}
+.dfm3-portrait .dfm3-print-name{font-size:clamp(5px,.7vw,8px);align-self:stretch;text-align:right}
+.dfm3-portrait .dfm3-print-domain{text-align:right}
+.dfm3-portrait [hidden]{display:none!important}
 .dfm3-design-label{font-size:.82rem;font-weight:750;margin:.1rem 0 .35rem;color:#e5e0d3}
 .dfm3-design-strip{display:flex;gap:.45rem;overflow-x:auto;scroll-snap-type:x proximity;padding:.15rem .1rem .5rem;overscroll-behavior-inline:contain;scrollbar-width:thin}
 .dfm3-design-strip button{flex:0 0 88px;min-width:0;scroll-snap-align:start;padding:.25rem;border:2px solid #4b5d4a;border-radius:7px;background:#171a16;color:#f5e5c5;cursor:pointer;text-align:left;font:inherit}
@@ -299,6 +301,15 @@ const colors=[{key:'black',label:'Black',hex:'#171717'},{key:'white',label:'Whit
 const garments=[{key:'tshirt',label:'T-shirt'},{key:'hoodie',label:'Hoodie'}];
 const stateMap=new WeakMap();
 const portraitCache=new Map(),baseCache=new Map();
+// All eight neutral templates are registered to the same chest-print origin.
+// Anchors are measured on the original 596 × 653 source images; validate visually before merging.
+const frame={w:596,h:653,x:298,y:305,printWidth:162};
+const anchors={
+ jack:{tshirt:[300,282],hoodie:[300,340]},
+ sophie:{tshirt:[320,310],hoodie:[315,350]},
+ george:{tshirt:[304,280],hoodie:[304,340]},
+ emma:{tshirt:[310,302],hoodie:[310,343]}
+};
 // Images are stored as compact base64 WebP/PNG wrapped in local SVG text files.
 // Some browsers block nested raster rendering inside SVG <img>; unwrap on load.
 const imageUrlCache=new Map();
@@ -311,38 +322,58 @@ function hydrateImages(root){
 }
 
 function stageHtml(p,st){
- const m=models[st.m],c=colors[st.c],g=garments[st.g],a=st.g?m.h:m.t;
+ const m=models[st.m],c=colors[st.c],g=garments[st.g];
  const src=`assets/approved/models/${m.key}-${g.key}-gray.webp`;
  const ink=c.key==='black'?'#f5e9d0':'#1d1e1b';
- return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print" style="--chest-left:${a.print[0]}%;--chest-top:${a.print[1]}%;--chest-width:${a.print[2]}%;--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false">${p.fullPrint?'':`<span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span>`}</div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design">‹</button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design">›</button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}</div>`;
+ return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print" style="--chest-left:${100*frame.x/frame.w}%;--chest-top:${100*frame.y/frame.h}%;--chest-width:${100*frame.printWidth/frame.w}%;--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false">${p.fullPrint?'':`<span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span>`}</div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design">‹</button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design">›</button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}</div>`;
 }
 function galleryHtml(p,st){
  return stageHtml(p,st)+`<div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>`;
 }
+function clamp01(v){return Math.max(0,Math.min(1,v));}
 function recolorPortrait(m,g,c){
  const key=m.key+'-'+g.key+'-'+c.key;
  if(portraitCache.has(key))return portraitCache.get(key);
  const a=g.key==='hoodie'?m.h:m.t;
- const src=`assets/approved/models/${m.key}-${g.key}-gray.webp`;
+ const src='assets/approved/models/'+m.key+'-'+g.key+'-gray.webp';
  let pending=baseCache.get(src);
- if(!pending){pending=new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src});baseCache.set(src,pending);}
+ if(!pending){pending=new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src});baseCache.set(src,pending);pending.catch(()=>baseCache.delete(src));}
  const task=pending.then(im=>{
-  const canvas=document.createElement('canvas');canvas.width=im.naturalWidth;canvas.height=im.naturalHeight;
-  const ctx=canvas.getContext('2d',{willReadFrequently:true}),w=canvas.width,h=canvas.height,sx=w/596,sy=h/653;
-  ctx.drawImage(im,0,0);const [x1,y1,x2,y2]=a.box;ctx.fillStyle='#fff';
-  ctx.fillRect(0,0,w,Math.round(y1*sy));ctx.fillRect(0,Math.round(y2*sy),w,h);ctx.fillRect(0,0,Math.round(x1*sx),h);ctx.fillRect(Math.round(x2*sx),0,w,h);
+  // Work on a single immutable neutral template; there is never a second clothing image.
+  const canvas=document.createElement('canvas');canvas.width=frame.w;canvas.height=frame.h;
+  const ctx=canvas.getContext('2d',{willReadFrequently:true}),w=frame.w,h=frame.h;
+  ctx.drawImage(im,0,0,w,h);const [x1,y1,x2,y2]=a.box;ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,w,y1);ctx.fillRect(0,y2,w,h);ctx.fillRect(0,0,x1,h);ctx.fillRect(x2,0,w,h);
   if(c.key!=='gray'){
-   const mask=document.createElement('canvas');mask.width=w;mask.height=h;const mc=mask.getContext('2d');mc.beginPath();a.poly.forEach(([x,y],i)=>i?mc.lineTo(x*sx,y*sy):mc.moveTo(x*sx,y*sy));mc.closePath();mc.fill();
-   const alpha=mc.getImageData(0,0,w,h).data, pixels=ctx.getImageData(0,0,w,h),d=pixels.data;
-   const clamp=v=>Math.max(0,Math.min(1,v));
-   for(let i=0;i<d.length;i+=4){if(!alpha[i+3])continue;const r=d[i],gg=d[i+1],b=d[i+2],l=.2126*r+.7152*gg+.0722*b,ch=Math.max(r,gg,b)-Math.min(r,gg,b);
-    const weight=alpha[i+3]/255*clamp((32-ch)/20)*clamp((242-l)/22)*clamp((l-40)/35);
-    if(!weight)continue;
-    const target=c.key==='black'?Math.min(93,Math.max(10,l*.42-26)):Math.max(45,Math.min(250,255-(255-l)*.30));
-    d[i]=r+(target-r)*weight;d[i+1]=gg+(target-gg)*weight;d[i+2]=b+(target-b)*weight;
-   }ctx.putImageData(pixels,0,0);
+   // A single silhouette guide is expanded slightly to reach the anti-aliased actual cloth edge.
+   // Neutral fabric pixels, not the polygon alone, determine the recolouring.
+   const mask=document.createElement('canvas');mask.width=w;mask.height=h;
+   const mc=mask.getContext('2d');mc.fillStyle='#fff';mc.strokeStyle='#fff';mc.lineWidth=30;mc.lineJoin='round';
+   mc.beginPath();a.poly.forEach(([x,y],i)=>i?mc.lineTo(x,y):mc.moveTo(x,y));mc.closePath();mc.fill();mc.stroke();
+   const guide=mc.getImageData(0,0,w,h).data, pixels=ctx.getImageData(0,0,w,h),d=pixels.data;
+   for(let i=0;i<d.length;i+=4){
+    if(!guide[i+3])continue;
+    const r=d[i],gg=d[i+1],b=d[i+2],l=.2126*r+.7152*gg+.0722*b,ch=Math.max(r,gg,b)-Math.min(r,gg,b);
+    // Preserve skin, hair, denim and white studio background. Estimate the fractional cloth
+    // coverage of light edge pixels against white instead of laying an opaque shape on top.
+    const neutral=clamp01((28-ch)/15);
+    const darkGuard=clamp01((l-34)/34);
+    const coverage=clamp01((250-l)/67)*neutral*darkGuard*(guide[i+3]/255);
+    if(!coverage)continue;
+    const cloth=l>183?183:l;
+    const target=c.key==='black'?Math.max(12,Math.min(93,cloth*.42-26)):Math.max(60,Math.min(250,255-(255-cloth)*.30));
+    const delta=(target-cloth)*coverage;
+    d[i]=r+delta;d[i+1]=gg+delta;d[i+2]=b+delta;
+   }
+   ctx.putImageData(pixels,0,0);
   }
-  return canvas.toDataURL('image/png');
+  // Register the entire photograph after colour calculation; never independently move
+  // a mask or garment. The chest anchor maps to (298, 305) for every model and garment.
+  const out=document.createElement('canvas');out.width=w;out.height=h;
+  const oc=out.getContext('2d');oc.fillStyle='#fff';oc.fillRect(0,0,w,h);
+  const [ax,ay]=anchors[m.key][g.key];
+  oc.drawImage(canvas,frame.x-ax,frame.y-ay);
+  return out.toDataURL('image/png');
  }).catch(err=>{portraitCache.delete(key);throw err;});
  portraitCache.set(key,task);return task;
 }
@@ -360,14 +391,29 @@ function mount(gallery,detail,p){
   });
   if(modal)detail.closest('dialog').querySelector('#dfm3-modal-title').textContent=p.title;
  }
+ let redrawVersion=0,lastGood=null;
  function redraw(){
+  const version=++redrawVersion,selected={...st},selectedProduct=p;
   const oldStrip=gallery.querySelector('.dfm3-design-strip'),left=oldStrip?oldStrip.scrollLeft:0;
-  gallery.innerHTML=galleryHtml(p,st);
-  const strip=gallery.querySelector('.dfm3-design-strip');strip.scrollLeft=left;
-  const chosen=strip.querySelector('[aria-pressed="true"]');if(chosen){const b=chosen.getBoundingClientRect(),s=strip.getBoundingClientRect();if(b.left<s.left)strip.scrollLeft-=s.left-b.left+4;else if(b.right>s.right)strip.scrollLeft+=b.right-s.right+4}
-  const img=gallery.querySelector('.dfm3-base'),m=models[st.m],g=garments[st.g],c=colors[st.c];img.style.visibility='hidden';
-  recolorPortrait(m,g,c).then(url=>{if(!img.isConnected)return;img.src=url;img.style.visibility='visible'}).catch(()=>{if(!img.isConnected)return;img.src=`assets/approved/models/${m.key}-${g.key}-${c.key}.webp`;img.style.visibility='visible';img.addEventListener('error',()=>{if(img.dataset.failed)return;img.dataset.failed='1';img.alt='Selected preview unavailable';img.closest('.dfm3-portrait').querySelector('.dfm3-print').hidden=true},{once:true})});
-  hydrateImages(gallery);
+  const pending=document.createElement('div');pending.innerHTML=galleryHtml(selectedProduct,selected);
+  const img=pending.querySelector('.dfm3-base'),m=models[selected.m],g=garments[selected.g],c=colors[selected.c];
+  gallery.setAttribute('aria-busy','true');
+  recolorPortrait(m,g,c).then(async url=>{
+   img.src=url;await img.decode();
+   if(version!==redrawVersion||!gallery.isConnected)return;
+   // One atomic DOM replacement: no intermediate old/new garment superposition.
+   gallery.replaceChildren(...pending.childNodes);gallery.removeAttribute('aria-busy');lastGood={...selected,p:selectedProduct};
+   const strip=gallery.querySelector('.dfm3-design-strip');strip.scrollLeft=left;
+   const chosen=strip.querySelector('[aria-pressed="true"]');if(chosen){const b=chosen.getBoundingClientRect(),v=strip.getBoundingClientRect();if(b.left<v.left)strip.scrollLeft-=v.left-b.left+4;else if(b.right>v.right)strip.scrollLeft+=b.right-v.right+4}
+   hydrateImages(gallery);
+  }).catch(()=>{
+   if(version!==redrawVersion||!gallery.isConnected)return;
+   gallery.removeAttribute('aria-busy');
+   // Never fall back to a different coloured photograph with mismatched pose or outline.
+   if(lastGood){const {p:previous,...previousState}=lastGood;Object.assign(st,previousState);p=previous;stateMap.get(gallery).p=p;renderDetail();}
+   else {gallery.replaceChildren(...pending.childNodes);gallery.querySelector('.dfm3-base').hidden=true;gallery.querySelector('.dfm3-print').hidden=true;hydrateImages(gallery);}
+   const note=gallery.querySelector('.dfm3-stage-counter');if(note)note.textContent='Selected preview unavailable — please retry.';
+  });
  }
  function changeDesign(i){st.d=(i+products.length)%products.length;p=products[st.d];stateMap.get(gallery).p=p;renderDetail();redraw()}
  gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.design!==undefined){changeDesign(+b.dataset.design);return}if(b.matches('.next')){changeDesign(st.d+1);return}if(b.matches('.prev')){changeDesign(st.d-1);return}if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else return;redraw()});
