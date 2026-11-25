@@ -282,6 +282,14 @@ html{scroll-behavior:smooth;scroll-padding-top:2rem}body{font-size:17px}header{b
 .dfm3-mini-models{margin:.35rem 0 .45rem}.dfm3-mini-models button{min-height:39px}
 .dfm3-colors{margin:.35rem 0 .7rem}
 @media(max-width:600px){.dfm3-stage,#dfm3-modal .dfm3-stage{width:min(100%,272px)}.dfm3-carousel-btn{width:33px;height:38px;font-size:1.6rem}.dfm3-design-strip button{flex-basis:73px}.dfm3-design-strip img{height:41px}.dfm3-portrait .dfm3-print-name{font-size:5px}.dfm3-portrait .dfm3-print-domain{font-size:4px}}
+/* The complete artwork and its labels must fit inside the independently measured rectangle. */
+.dfm3-portrait{container-type:inline-size}
+.dfm3-portrait .dfm3-print{left:var(--chest-left);top:var(--chest-top);width:var(--chest-width);height:var(--chest-height);transform:none;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:0;box-sizing:border-box}
+.dfm3-portrait .dfm3-print img{flex:0 1 auto;width:100%;height:78%;min-height:0;max-height:78%;object-fit:contain;object-position:center bottom;filter:none;mix-blend-mode:normal}
+.dfm3-portrait .dfm3-print-name,.dfm3-portrait .dfm3-print-domain{flex:0 0 auto;display:block;max-width:100%;align-self:stretch;text-align:right;line-height:1.1;overflow-wrap:anywhere}
+.dfm3-portrait .dfm3-print-name{font-size:1.15cqw}
+.dfm3-portrait .dfm3-print-domain{font-size:.87cqw}
+.dfm3-portrait .dfm3-full-print img{height:100%;max-height:100%;object-position:center center}
 </style>
 <script id="dfm3-unified-merch-script">
 (()=>{
@@ -301,15 +309,20 @@ const colors=[{key:'black',label:'Black',hex:'#171717'},{key:'white',label:'Whit
 const garments=[{key:'tshirt',label:'T-shirt'},{key:'hoodie',label:'Hoodie'}];
 const stateMap=new WeakMap();
 const portraitCache=new Map(),baseCache=new Map();
-// All eight neutral templates are registered to the same chest-print origin.
-// Anchors are measured on the original 596 × 653 source images; validate visually before merging.
-const frame={w:596,h:653,x:298,y:305,printWidth:162};
-const anchors={
- jack:{tshirt:[300,282],hoodie:[300,340]},
- sophie:{tshirt:[320,310],hoodie:[315,350]},
- george:{tshirt:[304,280],hoodie:[304,340]},
- emma:{tshirt:[310,302],hoodie:[310,343]}
+// Each garment photograph has an independently calibrated, bounded chest rectangle.
+const frame={w:596,h:653};
+const chestAreas={
+ jack:{tshirt:[216,270,164,104],hoodie:[215,279,170,122]},
+ sophie:{tshirt:[264,286,126,96],hoodie:[260,283,133,113]},
+ george:{tshirt:[215,268,176,110],hoodie:[216,276,176,125]},
+ emma:{tshirt:[233,280,158,104],hoodie:[228,277,168,124]}
 };
+function chestArea(m,g){
+ const rect=m.chest?.[g.key]??chestAreas[m.key]?.[g.key];
+ if(!rect||rect.length!==4||rect.some(v=>!Number.isFinite(v))||rect[0]<0||rect[1]<0||rect[2]<=0||rect[3]<=0||rect[0]+rect[2]>frame.w||rect[1]+rect[3]>frame.h)throw new Error('Missing or invalid chest area: '+m.key+' '+g.key);
+ return rect;
+}
+function modelSource(m,g){return m.sources?.[g.key]??'assets/approved/models/'+m.key+'-'+g.key+'-gray.webp';}
 // Images are stored as compact base64 WebP/PNG wrapped in local SVG text files.
 // Some browsers block nested raster rendering inside SVG <img>; unwrap on load.
 const imageUrlCache=new Map();
@@ -323,9 +336,9 @@ function hydrateImages(root){
 
 function stageHtml(p,st){
  const m=models[st.m],c=colors[st.c],g=garments[st.g];
- const src=`assets/approved/models/${m.key}-${g.key}-gray.webp`;
+ const src=modelSource(m,g),[x,y,w,h]=chestArea(m,g);
  const ink=c.key==='black'?'#f5e9d0':'#1d1e1b';
- return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print" style="--chest-left:${100*frame.x/frame.w}%;--chest-top:${100*frame.y/frame.h}%;--chest-width:${100*frame.printWidth/frame.w}%;--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false">${p.fullPrint?'':`<span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span>`}</div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design">‹</button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design">›</button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}</div>`;
+ return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print${p.fullPrint?' dfm3-full-print':''}" style="--chest-left:${100*x/frame.w}%;--chest-top:${100*y/frame.h}%;--chest-width:${100*w/frame.w}%;--chest-height:${100*h/frame.h}%;--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false">${p.fullPrint?'':`<span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span>`}</div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design">‹</button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design">›</button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}</div>`;
 }
 function galleryHtml(p,st){
  return stageHtml(p,st)+`<div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>`;
@@ -335,7 +348,7 @@ function recolorPortrait(m,g,c){
  const key=m.key+'-'+g.key+'-'+c.key;
  if(portraitCache.has(key))return portraitCache.get(key);
  const a=g.key==='hoodie'?m.h:m.t;
- const src='assets/approved/models/'+m.key+'-'+g.key+'-gray.webp';
+ const src=modelSource(m,g);
  let pending=baseCache.get(src);
  if(!pending){pending=new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src});baseCache.set(src,pending);pending.catch(()=>baseCache.delete(src));}
  const task=pending.then(im=>{
@@ -367,13 +380,8 @@ function recolorPortrait(m,g,c){
    }
    ctx.putImageData(pixels,0,0);
   }
-  // Register the entire photograph after colour calculation; never independently move
-  // a mask or garment. The chest anchor maps to (298, 305) for every model and garment.
-  const out=document.createElement('canvas');out.width=w;out.height=h;
-  const oc=out.getContext('2d');oc.fillStyle='#fff';oc.fillRect(0,0,w,h);
-  const [ax,ay]=anchors[m.key][g.key];
-  oc.drawImage(canvas,frame.x-ax,frame.y-ay);
-  return out.toDataURL('image/png');
+  // Preserve the original photograph coordinates; the overlay uses that model's rectangle.
+   return canvas.toDataURL('image/png');
  }).catch(err=>{portraitCache.delete(key);throw err;});
  portraitCache.set(key,task);return task;
 }
