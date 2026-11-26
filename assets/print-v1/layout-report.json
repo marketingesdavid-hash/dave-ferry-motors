@@ -1,0 +1,172 @@
+[
+  {
+    "key": "henderson",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      150,
+      292,
+      2700,
+      1208
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 786581,
+    "sourceOpaquePixels": 727247,
+    "widthException": false
+  },
+  {
+    "key": "bmw",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      152,
+      70,
+      2697,
+      1430
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 804853,
+    "sourceOpaquePixels": 755089,
+    "widthException": true
+  },
+  {
+    "key": "california",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      150,
+      74,
+      2700,
+      1426
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 620113,
+    "sourceOpaquePixels": 935576,
+    "widthException": false
+  },
+  {
+    "key": "nightrod",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      378,
+      70,
+      2245,
+      1430
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 605050,
+    "sourceOpaquePixels": 957663,
+    "widthException": true
+  },
+  {
+    "key": "chromo",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      150,
+      76,
+      2700,
+      1424
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 824880,
+    "sourceOpaquePixels": 726882,
+    "widthException": false
+  },
+  {
+    "key": "nsu",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      150,
+      157,
+      2700,
+      1343
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 715418,
+    "sourceOpaquePixels": 796556,
+    "widthException": false
+  },
+  {
+    "key": "guzzi",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      150,
+      168,
+      2700,
+      1332
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 712045,
+    "sourceOpaquePixels": 827607,
+    "widthException": false
+  },
+  {
+    "key": "panhead",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      472,
+      70,
+      2056,
+      1430
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 904866,
+    "sourceOpaquePixels": 616831,
+    "widthException": true
+  },
+  {
+    "key": "v7",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      549,
+      70,
+      1902,
+      1430
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 833529,
+    "sourceOpaquePixels": 710050,
+    "widthException": true
+  },
+  {
+    "key": "police",
+    "canvas": [
+      3000,
+      2000
+    ],
+    "motorBounds": [
+      385,
+      70,
+      2230,
+      1430
+    ],
+    "wheelBaseline": 1500,
+    "sourceTransparentPixels": 675858,
+    "sourceOpaquePixels": 882068,
+    "widthException": true
+  }
+]

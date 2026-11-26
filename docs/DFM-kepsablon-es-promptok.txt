@@ -1,0 +1,51 @@
+DAVE FERRY MOTORS – EGYSÉGES KÉPSÉMA v1
+
+Cél: azonos látható méretű, élénk színű, fedő motorábrázolások, tiszta fekete ruházati alaprétegeken.
+Szín- és kidolgozási referencia: guzzi-arancia-meccanica-transparent.webp. A referencia nem helyettesíti az adott motor saját forrásképét.
+
+MOTOROS GRAFIKA SÉMÁJA
+- Végleges vászon: 3000 × 2000 px, RGBA PNG, sRGB. Ez kimeneti célméret, exportnál külön ellenőrizendő.
+- A motor látható szélessége, felirat nélkül: 2700 px, azaz 90%; vízszintesen középre igazítva. Bal és jobb margó 150 px.
+- Kerekek alsó érintővonala: y=1500 px. A teljes motor férjen a vászonra. Szokatlanul magas motor vagy oldalkocsi esetén arányos kisebbítés és dokumentált kivétel szükséges; tilos nyújtani vagy levágni.
+- Feliratok közös területe: y=1580–1900 px. Jobb szélük x=2850 px. Márka és típus legfeljebb két sorban, alatta kisebb honlapcím. Évjárat csak igazolt adatból.
+- Tilos a fájl teljes befoglaló téglalapját a motor méretének tekinteni: a szöveget és az üres margókat ki kell zárni a mérésből.
+- A valódi alkatrészek teljesen fedők, alpha=255: gumi, ülés, motorblokk, fekete árnyékok, króm és világos fénypontok is.
+- Átlátszó csak a háttér és a szerkezet valódi nyílásai. A széleken élsimítás megengedett. Fekete vagy fehér színt globálisan eltüntetni tilos.
+- Élénk, telt eredeti színek, részletes fémek, határozott kontraszt. Nincs koptatás, raszterpötty, festékszórás, szürke fátyol, háttérglória vagy talajárnyék.
+- A motor és felirata külön szerkeszthető réteg legyen, ha a használt eszköz támogatja. A pontos végső méretezés és tipográfia szerkesztőben ellenőrizendő: prompt önmagában nem garantál pixelpontosságot.
+
+MÁSOLHATÓ MOTOR-PROMPT
+
+Készítsd újra a mellékelt [MOTOR NEVE] motoros pólógrafikát a DFM v1 séma szerint.
+1. kép: az adott motor, ez a geometria, nézőpont, alkatrészek és eredeti színek kötelező forrása.
+2. kép: Moto Guzzi Arancia Meccanica, kizárólag a telt színek, fedő felületek és részletesség referenciája. A narancssárga színt, a motor alakját és feliratát ne másold át.
+Őrizd meg a forrásmotor arányait és minden jellegzetes részletét. Ne találj ki alkatrészt vagy évjáratot.
+Fekvő 3:2 vászon, végső export 3000 × 2000 px. A motor a felirat nélkül mérve a vászon szélességének 90%-át foglalja el, középre igazítva. Mindkét kerék és minden alkatrész teljes egészében látszódjon. Kerekek alsó vonala a magasság 75%-ánál. Ne nyújtsd a motort.
+A motor minden anyagfelülete legyen teljesen fedő. A fekete gumik, ülés, blokk és árnyékok is maradjanak fedő feketék, a króm és fehér fénypontok is maradjanak fedők. Csak a háttér és a valódi szerkezeti rések legyenek alpha-átlátszók.
+Az Arancia referenciához hasonló telt, erőteljes, de az eredeti motorhoz hű színek és részletes, tiszta kidolgozás szükséges.
+Jobb alul jobbra igazítva: [MÁRKA – TÍPUS – IGAZOLT ÉVJÁRAT]; alatta kisebben pontosan: daveferrymotors.com. A szöveg férjen a motor alatti közös sávba. Ne adj hozzá más szöveget.
+Ne legyen háttértéglalap, glória, talajárnyék, keret, koptatás, szórt fehér/szürke pötty, félig átlátszó festék vagy sakktáblaminta. Egyetlen különálló nyomtatási grafika készüljön, ruházat és modell nélkül.
+Export után ellenőrizd a tényleges alpha-csatornát és a motor látható méretét; fehér, fekete és szürke háttéren is vizsgáld meg. Ha nem pontos, javítsd, és ne jelöld késznek az ellenőrizetlen képet.
+
+MÁSOLHATÓ FEKETE PÓLÓ / HOODIE JAVÍTÓPROMPT
+
+A mellékelt modellképen kizárólag a fekete [PÓLÓ/HOODIE] anyagának hibáit javítsd. A mellkas legyen összefüggő, tiszta, mélyfekete, matt textil; ne legyen rajta fehér vagy szürke pont, folt, raszter, maradék grafika vagy átlátszó lyuk. Természetes, széles tónusátmenetek és anyagredők maradhatnak, pontszerű csillogás nem.
+Az arc, haj, bőr, testalkat, tetoválás, testtartás, ruha körvonala, nyakkivágás, kamera, képkivágás és fehér háttér pontosan maradjon változatlan. Hoodie esetén ne legyen madzag. Ne rajzolj motort vagy feliratot a ruhára: ez üres ruházati alapréteg, amelyre a külön motoros grafika később kerül.
+Őrizd meg a fájl eredeti méretét és a már jóváhagyott mellkasi illesztést. Ne hozz létre új modellt, és ne mozdítsd el a mellkast.
+
+RÉTEGEZÉS A HONLAPON
+1. Meglévő, jóváhagyott modell/alapruha, javított fekete mellkassal.
+2. Külön átlátszó motoros grafika, minden motorhoz azonos belső méretezési séma szerint.
+3. A már javított mellkasi rögzítést meg kell őrizni. A grafika felső mellkason maradjon, hasra ne érjen.
+Az alapruha pontjait az alaprétegen kell javítani; a grafika átlátszósági hibáit a grafikán. Globális színeltávolítás és a teljes réteg áttetszőségének csökkentése tilos.
+
+ÁTVÉTELI ELLENŐRZÉS
+- A motorok egymás mellett ugyanazon skálán jelennek meg.
+- A piros Guzzi nem kisebb a nagy üres margók miatt.
+- A motor belseje fehér és szürke háttérre helyezve sem lyukas.
+- A fekete ruha a grafika nélkül is tiszta.
+- Modell-, szín- és ruhaváltáskor a mellkasi minta mérete és helye nem ugrik el.
+- A felirat pontos, a honlapcím jobb alul található.
+
+STÁTUSZ
+Ez a fájl a gyártási séma és újrahasználható promptok leírása. Nem igazolja a teljes képkészlet vagy az élő honlap frissítését.
