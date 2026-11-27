@@ -1,0 +1,42 @@
+name: v4.1 mobile-only release QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/verify-v41-mobile.cjs'
+      - '.github/workflows/v41-mobile-release.yml'
+permissions:
+  contents: write
+jobs:
+  browser:
+    if: github.event.pull_request.head.ref == 'v41-mobile-release-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 &
+          trap 'kill $!' EXIT
+          node scripts/verify-v41-mobile.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v41-mobile-release-screenshots
+          path: qa-v41-mobile/
+      - name: Save review screenshots
+        run: |
+          test "$(git branch --show-current)" = "v41-mobile-release-20261127"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qa-v41-mobile
+          if ! git diff --cached --quiet; then
+            git commit -m "Save v4.1 mobile release QA screenshots"
+            git push origin HEAD:v41-mobile-release-20261127
+          fi
