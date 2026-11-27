@@ -2,7 +2,7 @@ from pathlib import Path
 import base64,io,json
 import numpy as np
 from PIL import Image,ImageDraw
-from scipy.ndimage import gaussian_filter,binary_fill_holes,binary_closing,binary_dilation
+from scipy.ndimage import gaussian_filter,binary_fill_holes,binary_closing,binary_dilation,label
 root=Path(__file__).resolve().parents[1]
 src=json.loads((root/'assets/models-v4.js').read_text().split('Object.freeze(',1)[1].rsplit(')',1)[0])
 out=root/'assets/models-v41-light';out.mkdir(exist_ok=True)
@@ -72,7 +72,13 @@ for m in ('jack','sophie','george','emma'):
    # the old, verified green/burgundy image was unchanged from black.
    alpha[region&(delta<5)]=0
   blue=(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(y>hem-26)
-  denim_guard=blue|(y>=hem+1)
+  # A blueish cloth fold is not denim. Require a connected jeans component
+  # reaching the image's bottom row rather than classifying isolated pixels.
+  lab,n=label(binary_closing(blue,iterations=1))
+  bottom_ids=np.unique(lab[648]);bottom_ids=bottom_ids[bottom_ids!=0]
+  jeans=binary_fill_holes(np.isin(lab,bottom_ids))
+  jeans|=(blue & binary_dilation(jeans,iterations=1))
+  denim_guard=jeans|(y>=hem+1)
   skin=(black[:,:,0]-black[:,:,2]>32)&(l>60)
   alpha[denim_guard|skin]=0
   # In the middle of solid cloth, remove small spots caused by prior recolouring masks.
@@ -82,7 +88,7 @@ for m in ('jack','sophie','george','emma'):
   if k=='george-hoodie':
    q=np.sqrt(((x-299)/61)**2+((y-169)/38)**2)
    blend=(1-smooth(.68,1,q))[...,None];base=base*(1-blend)+gray*blend
-   alpha[(y<205)&(x>237)&(x<361)]=0
+   # Protect actual beard and neck via the skin/colour evidence, not a rectangular cutout.
   for c,ref in [('white',white),('gray',gray)]:
    # Preserve original photo outside garment, including every blue denim pixel.
    im=np.rint(base*(1-alpha[...,None])+ref*alpha[...,None]).clip(0,255).astype('uint8')
