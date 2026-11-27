@@ -2,7 +2,7 @@ from pathlib import Path
 import base64,io,json
 import numpy as np
 from PIL import Image,ImageDraw
-from scipy.ndimage import gaussian_filter,binary_fill_holes,binary_closing
+from scipy.ndimage import gaussian_filter,binary_fill_holes,binary_closing,label,distance_transform_edt
 root=Path(__file__).resolve().parents[1]
 src=json.loads((root/'assets/models-v4.js').read_text().split('Object.freeze(',1)[1].rsplit(')',1)[0])
 out=root/'assets/models-v41';out.mkdir(exist_ok=True)
@@ -19,29 +19,46 @@ for m in ('jack','sophie','george','emma'):
   khaki=arr(Image.open(root/'assets/models-v32'/ (k+'-khaki.webp')))
   burgundy=arr(Image.open(root/'assets/models-v32'/ (k+'-burgundy.webp')))
   gray,white=load(k+'-gray'),load(k+'-white')
-  # The two visually reviewed pre-rendered colours differ only on fabric;
-  # intersect their changes and exclude original blue denim and skin.
-  delta=np.minimum(np.max(abs(khaki-black),axis=2),np.max(abs(burgundy-black),axis=2))
-  alpha=smooth(2,25,delta)
-  # Close small internal holes in the approved fabric mask; these otherwise appear as black spots on light cloth.
-  interior=binary_fill_holes(binary_closing(alpha>.65,iterations=3))
-  alpha=np.maximum(alpha,interior.astype(np.float32))
-  l=black@np.array([.2126,.7152,.0722],dtype=np.float32)
-  y,x=np.ogrid[:653,:596]
-  blue=(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(y>420)
-  skin=(black[:,:,0]-black[:,:,2]>32)&(l>60)
-  alpha[blue|skin]=0
-  # In the middle of solid cloth, remove small spots caused by prior recolouring masks.
-  alpha[y.repeat(596,axis=1)<175]=0
-  alpha=np.clip(gaussian_filter(alpha,.4),0,1);alpha[blue|skin]=0
+  # Recover the exact common fabric mask and shade from the two reviewed,
+  # lossless colour renders. This avoids reusing black defects in old light photos.
   base=black.copy()
+  y,x=np.ogrid[:653,:596]
   if k=='george-hoodie':
    q=np.sqrt(((x-299)/61)**2+((y-169)/38)**2)
    blend=(1-smooth(.68,1,q))[...,None];base=base*(1-blend)+gray*blend
-   alpha[(y<205)&(x>237)&(x<361)]=0
-  for c,ref in [('white',white),('gray',gray)]:
-   # Preserve original photo outside garment, including every blue denim pixel.
-   im=np.rint(base*(1-alpha[...,None])+ref*alpha[...,None]).clip(0,255).astype('uint8')
+  weights=np.array([.2126,.7152,.0722],dtype=np.float32)
+  L=base@weights
+  diff=np.array([-16.,60.,15.],dtype=np.float32)
+  shadealpha=((khaki-burgundy)@diff)/(diff@diff)
+  shadealpha=np.clip(shadealpha,0,1.4)
+  alpha=(shadealpha*(np.array([98,107,70])@weights)-(khaki-base)@weights)/np.maximum(L,4)
+  alpha=np.clip(alpha,0,1)
+  alpha=np.where(shadealpha>.008,alpha,0)
+  shade=np.clip(shadealpha/np.maximum(alpha,.005),.60,1.40)
+  # Fill tiny holes inside fabric only. Avoid wrists, eyes, hair, denim and background.
+  core=alpha>.70
+  filled=binary_fill_holes(binary_closing(core,iterations=3))
+  holes=filled&~core
+  labs,num=label(holes)
+  counts=np.bincount(labs.ravel());small=(counts>0)&(counts<=350);small[0]=False
+  holes=small[labs]&(L<95)&((base.max(axis=2)-base.min(axis=2))<35)
+  nearest=distance_transform_edt(~core,return_distances=False,return_indices=True)
+  shade[holes]=shade[tuple(nearest)][holes]
+  alpha[holes]=1
+  blue=(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(y>420)
+  skin=(black[:,:,0]-black[:,:,2]>32)&(L>60)
+  protected=blue|skin|(y<175)|(L>180)
+  if k=='george-hoodie':
+   protected|=(y<205)&(x>237)&(x<361)
+  alpha[protected]=0
+  # The reviewed preview colours define the same garment boundary. Generate
+  # new neutral light fabric directly, without old white or gray texture defects.
+  for c,target in [('white',221.),('gray',137.)]:
+   # Keep natural luminance detail in the original dark photograph at full opacity.
+   detail=L-gaussian_filter(L,1.2)
+   cloth=np.clip(shade*target+detail*.32,0,255)
+   tint=np.repeat(cloth[...,None],3,axis=2)
+   im=np.rint(base*(1-alpha[...,None])+tint*alpha[...,None]).clip(0,255).astype('uint8')
    assert np.array_equal(im[blue],black.astype('uint8')[blue])
    Image.fromarray(im).save(out/(k+'-'+c+'.webp'),lossless=True,method=6)
   for col,c in enumerate(('black','white','gray','khaki','burgundy')):
