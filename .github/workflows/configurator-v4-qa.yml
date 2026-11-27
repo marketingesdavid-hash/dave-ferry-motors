@@ -1,0 +1,43 @@
+name: Configurator v4 browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/dfm-shop-v3.js'
+      - 'scripts/verify-configurator-v4.cjs'
+      - '.github/workflows/configurator-v4-qa.yml'
+permissions:
+  contents: write
+jobs:
+  browser:
+    if: github.event.pull_request.head.ref == 'configurator-v4-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 &
+          trap 'kill $!' EXIT
+          node scripts/verify-configurator-v4.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: configurator-v4-screenshots
+          path: qa-v4/
+      - name: Save review screenshots
+        run: |
+          test "$(git branch --show-current)" = "configurator-v4-20261127"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qa-v4/desktop.jpg qa-v4/mobile.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Save v4 browser QA screenshots"
+            git push origin HEAD:configurator-v4-20261127
+          fi
