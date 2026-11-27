@@ -1,0 +1,38 @@
+name: v4.1 identity photo review
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/render-v41-identity.py'
+      - '.github/workflows/v41-identity-qa.yml'
+permissions:
+  contents: write
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'v41-character-qa-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy scipy pillow
+      - run: python scripts/render-v41-identity.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v41-identity-candidates
+          path: |
+            assets/models-v41-identity/
+            qa-v41-identity/
+      - name: Save candidates only to review branch
+        run: |
+          test "$(git branch --show-current)" = "v41-character-qa-20261127"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/models-v41-identity qa-v41-identity
+          if ! git diff --cached --quiet; then
+            git commit -m "Render 40 identity review photos and contact sheets"
+            git push origin HEAD:v41-character-qa-20261127
+          fi
