@@ -22,7 +22,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -45,7 +46,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "v7",
@@ -69,7 +73,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -92,7 +97,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "henderson",
@@ -116,7 +124,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -139,7 +148,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "bmw",
@@ -163,7 +175,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -186,7 +199,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "california",
@@ -210,7 +226,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -233,7 +250,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "nightrod",
@@ -257,7 +277,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -280,7 +301,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "chromo",
@@ -304,7 +328,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -327,7 +352,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "nsu",
@@ -351,7 +379,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -374,7 +403,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   },
   {
     "key": "guzzi",
@@ -398,7 +430,8 @@ window.DFM_CATALOG=[
     "colors": [
       "black",
       "white",
-      "gray"
+      "gray",
+      "khaki"
     ],
     "sizes": [
       "XS",
@@ -421,7 +454,10 @@ window.DFM_CATALOG=[
       "variants": null,
       "referral": null
     },
-    "status": "enquiry"
+    "status": "enquiry",
+    "colorAvailability": {
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+    }
   }
 ];
 window.DFM_ORDER_CONFIG={
