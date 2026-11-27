@@ -48,19 +48,28 @@ const smooth=(a,b,x)=>{const t=clamp01((x-a)/(b-a));return t*t*(3-2*t)};
 const lum=(d,i)=>.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];
 function loadRaster(src){return new Promise((ok,fail)=>{const im=new Image();im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=frame.w;cv.height=frame.h;const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(im,0,0,frame.w,frame.h);ok({cv,cx,pixels:cx.getImageData(0,0,frame.w,frame.h)})}catch(e){fail(e)}};im.onerror=fail;im.src=src})}
 function repairBeard(target,reference){const d=target.data,r=reference.data;for(let y=125;y<209;y++)for(let x=232;x<366;x++){const q=Math.sqrt(((x-299)/61)**2+((y-169)/38)**2),a=1-smooth(.68,1,q);if(a<=0)continue;const i=(y*frame.w+x)*4;for(let k=0;k<3;k++)d[i+k]=Math.round(d[i+k]*(1-a)+r[i+k]*a)}}
-function khakiPixels(base,gray,white,m,g){const d=base.data,r=gray.data,w=white.data;let changed=0;
+function khakiPixels(base,gray,white,m,g){
+ const d=base.data,r=gray.data,w=white.data,W=frame.w,H=frame.h;
  const top=g.key==='hoodie'?(m.key==='george'?181:179):190;
  const bottom=g.key==='hoodie'?({jack:610,sophie:570,george:624,emma:590}[m.key]):({jack:585,sophie:524,george:634,emma:532}[m.key]);
- for(let y=top;y<bottom;y++)for(let x=64;x<536;x++){const i=(y*frame.w+x)*4;
- // Head, neck, hair, exposed skin and blue denim are excluded from the garment mask.
- if(y<234&&x>237&&x<359)continue;
+ // Detect textile by the registered colour variants, not a rectangular neckline exclusion.
+ // Preserve skin, hair and background where the source colours do not change.
+ const mask=new Float32Array(W*H),visited=new Uint8Array(W*H);
+ for(let y=top;y<bottom;y++)for(let x=64;x<536;x++){const p=y*W+x,i=p*4;
  const l=lum(d,i),gl=lum(r,i),wl=lum(w,i),chroma=Math.max(d[i],d[i+1],d[i+2])-Math.min(d[i],d[i+1],d[i+2]);
- const alpha=smooth(18,55,gl-l)*smooth(35,100,wl-l)*(1-smooth(18,48,chroma))*(1-smooth(95,150,l));
- if(alpha<.025)continue;
- // Use black and grey source folds for luminance; keep original edges and texture.
- const shade=clamp01((gl-104)/100+.5),gain=.68+.64*shade;
+ mask[p]=smooth(12,48,gl-l)*smooth(30,90,wl-l)*(1-smooth(18,48,chroma))*(1-smooth(95,150,l));
+ }
+ // Limit the colour change to the connected garment component, including the collar.
+ const queue=new Int32Array(W*H);let read=0,end=0;
+ const push=p=>{if(p>=0&&p<mask.length&&!visited[p]&&mask[p]>.025){visited[p]=1;queue[end++]=p}};
+ for(let y=280;y<350;y+=10)for(let x=260;x<340;x+=10)push(y*W+x);
+ while(read<end){const p=queue[read++],x=p%W;if(x>0)push(p-1);if(x<W-1)push(p+1);push(p-W);push(p+W)}
+ let changed=0;
+ for(let j=0;j<end;j++){const p=queue[j],i=p*4,alpha=mask[p];
+ const gl=lum(r,i),shade=clamp01((gl-104)/100+.5),gain=.68+.64*shade;
  const rgb=[98*gain,107*gain,70*gain];for(let k=0;k<3;k++)d[i+k]=Math.round(d[i+k]*(1-alpha)+rgb[k]*alpha);changed++;
- }return changed}
+ }return changed
+}
 function recolorPortrait(m,g,c){
  const src=modelSource(m,g,c),repair=m.key==='george'&&g.key==='hoodie'&&c.key!=='gray';
  if(!src)return Promise.reject(new Error('Missing model preview'));
