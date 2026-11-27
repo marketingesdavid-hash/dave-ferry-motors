@@ -120,7 +120,8 @@ function installPrintCss(){const style=document.createElement('style');style.tex
 }
 `;document.body.appendChild(style)}
 installPrintCss();
-function modelSource(m,g,c){const key=m.key+'-'+g.key+'-'+(c?.key??'black');return ['khaki','burgundy'].includes(c?.key)?'/assets/models-v32/'+key+'.webp?v=40':window.DFM_MODELS_V4?.[key]??'';}
+function correctedPhoto(m,g,c){return ['white','gray'].includes(c.key)||m.key==='george'&&g.key==='hoodie'}
+function modelSource(m,g,c){c=c||{key:'black'};const key=m.key+'-'+g.key+'-'+c.key;return correctedPhoto(m,g,c)?'/assets/models-v41-light/'+key+'.webp?v=412':['khaki','burgundy'].includes(c.key)?'/assets/models-v32/'+key+'.webp?v=40':window.DFM_MODELS_V4?.[key]??'';}
 // Images are stored as compact base64 WebP/PNG wrapped in local SVG text files.
 // Some browsers block nested raster rendering inside SVG <img>; unwrap on load.
 const imageUrlCache=new Map();
@@ -142,24 +143,9 @@ function galleryHtml(p,st){
  return '<div class="dfm3-photo-column">'+stageHtml(p,st)+'</div>'+ `<div class="dfm3-options-column"><p class="dfm3-options-title dfm3-current-design">${esc(p.title)}</p><div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><p class="dfm3-options-title">Garment</p><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><p class="dfm3-options-title">Model</p><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><p class="dfm3-options-title">Colour</p><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>${!productPage?'<a class="dfm3-cta dfm3-quick-product" href="'+urlFor(p,st)+'">View Product →</a>':''}</div><div class="dfm3-print-controls"><h3>Artwork Size &amp; Position</h3><label for="dfm4-scale">Artwork size</label><input id="dfm4-scale" aria-label="Artwork size" type="range" min="50" max="${Math.round(maxScale(st)*100)}" step="1" value="${Math.round(st.ps*100)}"><div class="dfm3-scale-row"><button type="button" data-scale="-1" aria-label="Decrease artwork size">−</button><output for="dfm4-scale">${Math.round(st.ps*100)}%</output><button type="button" data-scale="1" aria-label="Increase artwork size">+</button></div><div class="dfm3-direction-pad" role="group" aria-label="Move artwork"><button type="button" data-move="up" aria-label="Move print up">↑</button><button type="button" data-move="left" aria-label="Move print left">←</button><button type="button" data-move="right" aria-label="Move print right">→</button><button type="button" data-move="down" aria-label="Move print down">↓</button></div><button type="button" data-print-reset>Reset Design</button><button type="button" class="dfm3-editor-open" data-editor-open>Edit Design ⤢</button><p class="dfm3-print-hint">Pinch to resize · Drag to move</p><p class="dfm3-print-hint">Visual chest limits depend on the selected model. Final print dimensions are confirmed by SP Print.</p>${productPage?'<button type="button" data-share-config>Copy configuration link</button><p class="dfm3-print-hint" data-share-status role="status"></p>':''}</div>`;
 }
 function clamp01(v){return Math.max(0,Math.min(1,v));}
-// Create a new raster preview from the registered garment photos; no CSS tint.
-const rasterCache=new Map();
-const smooth=(a,b,x)=>{const t=clamp01((x-a)/(b-a));return t*t*(3-2*t)};
-const lum=(d,i)=>.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];
-function loadRaster(src){return new Promise((ok,fail)=>{const im=new Image();im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=frame.w;cv.height=frame.h;const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(im,0,0,frame.w,frame.h);ok({cv,cx,pixels:cx.getImageData(0,0,frame.w,frame.h)})}catch(e){fail(e)}};im.onerror=fail;im.src=src})}
-function repairBeard(target,reference){const d=target.data,r=reference.data;for(let y=125;y<209;y++)for(let x=232;x<366;x++){const q=Math.sqrt(((x-299)/61)**2+((y-169)/38)**2),a=1-smooth(.68,1,q);if(a<=0)continue;const i=(y*frame.w+x)*4;for(let k=0;k<3;k++)d[i+k]=Math.round(d[i+k]*(1-a)+r[i+k]*a)}}
-// New colours use individually pre-rendered and reviewed garment photographs.
-const preparedColours=new Set(['khaki','burgundy']);
-function recolorPortrait(m,g,c){
- if(preparedColours.has(c.key))return Promise.resolve('/assets/models-v32/'+m.key+'-'+g.key+'-'+c.key+'.webp?v=40');
- const src=modelSource(m,g,c),repair=m.key==='george'&&g.key==='hoodie'&&c.key!=='gray';
- if(!src)return Promise.reject(new Error('Missing model preview'));
- if(!repair)return Promise.resolve(src);
- const key=m.key+'-'+g.key+'-'+c.key;
- if(!rasterCache.has(key)){const gray=modelSource(m,g,{key:'gray'});
- const task=(async()=>{const [b,r]=await Promise.all([loadRaster(src),loadRaster(gray)]);repairBeard(b.pixels,r.pixels);b.cx.putImageData(b.pixels,0,0);return b.cv.toDataURL('image/png')})();rasterCache.set(key,task);task.catch(()=>rasterCache.delete(key))}
- return rasterCache.get(key);
-}
+// Every corrected light and George hoodie photo is stored as a reviewed static asset.
+// No runtime colour or beard patching is necessary.
+function recolorPortrait(m,g,c){const src=modelSource(m,g,c);return src?Promise.resolve(src):Promise.reject(new Error('Missing model preview'))}
 function artwork(p){return '<button type="button" class="dfm3-zoom-trigger" data-zoom aria-label="Enlarge artwork"><img class="dfm3-art" src="'+esc(p.art)+'" alt="'+esc(p.title)+' artwork"><span>Enlarge artwork ⤢</span></button>'}
 const sizeCharts={"women":{"title":"SOL’S 11502 – Imperial Women’s T-shirt","image":"https://spprint.be/image/catalog/meret1.png","rows":[["S",61,41],["M",63,44],["L",65,47],["XL",67,50],["2XL",69,53]]},"men":{"title":"SOL’S 11500 – Imperial Men’s T-shirt","image":"https://spprint.be/image/catalog/meret2.png","rows":[["XS",62,49],["S",70,50],["M",72,53],["L",74,56],["XL",76,59],["2XL",78,62],["3XL",80,64],["4XL",84,68]]},"hoodie":{"title":"SOL’S 13251 – SLAM Unisex Hooded Sweatshirt","image":"https://spprint.be/image/catalog/meret4.png","rows":[["XS",65,48],["S",67,51],["M",69,54],["L",71,57],["XL",73,60],["2XL",75,53]]}};
 function chartTable(chart){return '<div class="dfm3-size-table-wrap"><table class="dfm3-size-table"><caption>'+esc(chart.title)+'</caption><thead><tr><th scope="col">Size</th><th scope="col">Length (cm)</th><th scope="col">Width (cm)</th></tr></thead><tbody>'+chart.rows.map(row=>'<tr><th scope="row">'+esc(row[0])+'</th><td>'+row[1]+'</td><td>'+row[2]+(chart===sizeCharts.hoodie&&row[0]==='2XL'?' *':'')+'</td></tr>').join('')+'</tbody></table><a class="dfm3-foot" href="'+chart.image+'" target="_blank" rel="noopener">Original SP Print measurement diagram ↗</a></div>'}
