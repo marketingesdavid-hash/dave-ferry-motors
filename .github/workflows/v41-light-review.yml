@@ -1,0 +1,39 @@
+name: v4.1 light garment visual QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/render-light-v41-review.py'
+      - '.github/workflows/v41-light-review.yml'
+permissions:
+  contents: write
+jobs:
+  render:
+    if: github.event.pull_request.head.ref == 'v41-light-photo-qa-20261127' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow numpy scipy
+      - run: python scripts/render-light-v41-review.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v41-light-review
+          path: |
+            assets/models-v41-light/
+            qa-v41-light/
+      - name: Save review-only photographs
+        run: |
+          test "$(git branch --show-current)" = "v41-light-photo-qa-20261127"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/models-v41-light qa-v41-light
+          if ! git diff --cached --quiet; then
+            git commit -m "Render corrected white and grey garment candidates"
+            git push origin HEAD:v41-light-photo-qa-20261127
+          fi
