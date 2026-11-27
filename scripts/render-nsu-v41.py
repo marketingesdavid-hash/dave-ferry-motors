@@ -53,6 +53,19 @@ solids += [
  [(544,286),(557,288),(567,313),(568,345),(555,357),(543,344),(540,319)],
  [(466,460),(490,442),(521,440),(552,451),(570,477),(548,489),(508,486),(478,479)]
 ]
+# Add the handlebar silhouette that lies above the tank and outside the
+# first conservative outer envelope.
+bar=[(603,83),(610,77),(639,65),(673,52),(685,45),(691,37),(701,40),(703,49),(734,45),(757,49),(781,62),(798,77),(802,89),(790,95),(777,83),(759,73),(738,66),(716,66),(697,69),(677,81),(652,91),(625,101),(610,103),(604,97)]
+bar_mask=poly(bar)
+allowed|=bar_mask
+solids += [
+ bar,
+ [(687,40),(696,37),(699,50),(698,61),(714,64),(722,73),(717,85),(708,82),(695,74),(687,62)],
+ [(31,306),(42,282),(59,276),(70,282),(66,310),(54,318),(39,318)],
+ [(50,378),(65,373),(72,387),(78,397),(73,415),(52,414),(46,405)],
+ [(474,219),(499,213),(519,213),(526,228),(513,240),(493,241),(477,232)],
+ [(710,229),(733,219),(749,203),(756,210),(751,237),(739,268),(723,309),(713,323),(701,317),(709,288),(718,252)]
+]
 solid=wheel.copy()
 for points in solids:solid|=poly(points)
 # Thin dark frame and fork tubes: preserve only the real physical structure.
@@ -90,4 +103,15 @@ sheet=Image.new('RGB',(1000,5*290),'#eee');d=ImageDraw.Draw(sheet)
 for i,(name,col) in enumerate([('Black','#171717'),('White','#ffffff'),('Grey','#898989'),('Military Green','#626b46'),('Burgundy','#722f37')]):
  bg=Image.new('RGBA',(1000,290),col);im=motor.copy();im.thumbnail((880,250));bg.alpha_composite(im,((1000-im.width)//2,25));sheet.paste(bg.convert('RGB'),(0,i*290));d.text((10,i*290+6),name,fill='#f5e9d0' if i in (0,3,4) else '#171717')
 sheet.save(qa/'five-colours.jpg',quality=94)
+# Review the previously stored large WebP independently; it was not used
+# as a source for the new mask.
+try:
+ legacy=Image.open(root/'assets/print-v1/nsu.webp').convert('RGBA')
+ print('Legacy NSU',legacy.size,'alpha extrema',legacy.getchannel('A').getextrema())
+ im=legacy.copy();im.thumbnail((750,500))
+ check=Image.new('RGB',(800,2*530),'#eee')
+ for i,c in enumerate(('#ffffff','#626b46')):
+  bg=Image.new('RGBA',(800,530),c);bg.alpha_composite(im,((800-im.width)//2,(530-im.height)//2));check.paste(bg.convert('RGB'),(0,i*530))
+ check.save(qa/'legacy-large-comparison.jpg',quality=90)
+except Exception as exc:print('Legacy NSU unreadable',repr(exc))
 print('NSU rendered from original 1200 px photo; 3000 x 2000 PNG; interior alpha 255 and exterior 0; manual mask visual review still required')
