@@ -76,9 +76,51 @@ function installPrintCss(){const style=document.createElement('style');style.tex
 @media(min-width:751px){.dfm3-feature>.dfm3-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.5rem 1.5rem;align-items:start}.dfm3-detail>.dfm3-zoom-trigger{grid-row:span 4}.dfm3-detail>.dfm3-size-guide,.dfm3-detail>.dfm3-order-info{grid-column:1/-1}}
 @media(max-width:900px){.dfm3-gallery{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}.dfm3-print-controls{grid-column:1/-1}}
 @media(max-width:600px){.dfm3-gallery{display:flex;flex-direction:column;gap:.65rem}.dfm3-gallery>*{width:100%}.dfm3-stage,#dfm3-modal .dfm3-stage{width:100%;max-width:390px}.dfm3-print-controls{padding:.7rem}.dfm3-print-controls button{min-height:42px}.dfm3-direction-pad{grid-template-columns:repeat(3,42px)}.dfm3-colors{gap:.4rem}.dfm3-color{font-size:.8rem}}
+
+.dfm3-editor-open{display:none}
+.dfm41-editor{position:fixed;inset:0;width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:8px 12px max(8px,env(safe-area-inset-bottom));box-sizing:border-box;border:0;background:#171b16;color:#f5e5c5;overflow:auto}
+.dfm41-editor[open]{display:flex;flex-direction:column;align-items:center;gap:6px}
+.dfm41-editor::backdrop{background:#10120f}
+.dfm41-editor-head,.dfm41-editor-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;width:min(100%,520px);flex:none}
+.dfm41-editor-head h2{font-size:1.05rem;margin:0}
+.dfm41-editor-actions button,.dfm41-editor-head button{font:inherit;color:#f5e5c5;background:#263528;border:1px solid #75866a;border-radius:6px;min-height:42px;padding:5px 12px}
+.dfm41-editor-actions button[data-editor-apply]{background:#a2d49c;color:#172017;font-weight:800;flex:1}
+.dfm41-editor .dfm3-photo-column{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dfm41-editor .dfm3-stage{width:min(100%,calc(max(110px,100dvh - 270px)*596/653));max-width:520px;margin:0 auto}
+.dfm41-editor .dfm3-stage-counter{font-size:.7rem;line-height:1.1;margin:4px 0 0}
+.dfm41-editor .dfm3-carousel-btn,.dfm41-editor .dfm3-editor-open,.dfm41-editor [data-share-config],.dfm41-editor [data-share-status]{display:none!important}
+.dfm41-editor .dfm3-print-controls{width:min(100%,520px);box-sizing:border-box;flex:none}
+.dfm41-editor .dfm3-print-controls,.dfm3-print-controls.dfm41-compact{display:grid;grid-template-columns:1fr;gap:5px;padding:6px 8px}
+.dfm41-editor .dfm3-print-controls h3,.dfm41-editor .dfm3-print-controls>label,.dfm41-editor .dfm3-print-hint,.dfm41-compact .dfm3-print-controls h3{display:none}
+.dfm41-editor .dfm3-scale-row,.dfm41-compact .dfm3-scale-row{gap:7px}
+.dfm41-editor .dfm3-direction-pad,.dfm41-compact .dfm3-direction-pad{display:flex;gap:6px;justify-content:center}
+.dfm41-editor .dfm3-print-controls button,.dfm41-compact button{min-height:38px;min-width:40px;padding:4px 8px}
+.dfm41-editor .dfm3-print-controls [data-print-reset]{width:auto;justify-self:center}
+@media(max-width:600px){
+ .dfm3-gallery>.dfm3-photo-column{order:0}
+ .dfm3-gallery>.dfm3-print-controls{order:1}
+ .dfm3-gallery>.dfm3-options-column{order:2}
+ .dfm3-gallery>.dfm3-photo-column .dfm3-stage{width:min(100%,calc(max(180px,100dvh - 240px)*596/653));margin:auto}
+ .dfm3-gallery>.dfm3-print-controls{gap:5px;padding:6px 8px}
+ .dfm3-gallery>.dfm3-print-controls h3{font-size:.9rem}
+ .dfm3-gallery>.dfm3-print-controls>label{display:none}
+ .dfm3-gallery>.dfm3-print-controls .dfm3-direction-pad{display:flex;justify-content:center;gap:6px}
+ .dfm3-gallery>.dfm3-print-controls button{min-height:40px;min-width:40px;padding:4px 8px}
+ .dfm3-gallery>.dfm3-print-controls .dfm3-print-hint{font-size:.68rem}
+ .dfm3-gallery>.dfm3-print-controls .dfm3-print-hint:nth-last-of-type(1){display:none}
+ .dfm3-gallery>.dfm3-print-controls .dfm3-editor-open{display:block;width:100%;background:#a2d49c;color:#172017;font-weight:750}
+ .dfm3-gallery>.dfm3-print-controls [data-print-reset]{width:auto;justify-self:center}
+ .dfm41-editor .dfm3-print-controls button{min-height:38px}
+ .dfm41-editor .dfm3-stage{max-width:100%}
+}
+@media(max-height:500px) and (orientation:landscape){
+ .dfm41-editor[open]{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr) auto;overflow:auto}
+ .dfm41-editor-head,.dfm41-editor-actions{grid-column:1/-1;width:100%;max-width:none}
+ .dfm41-editor .dfm3-stage{width:min(100%,calc(max(100px,100dvh - 120px)*596/653))}
+}
 `;document.body.appendChild(style)}
 installPrintCss();
-function modelSource(m,g,c){const key=m.key+'-'+g.key+'-'+(c?.key??'black');return ['khaki','burgundy'].includes(c?.key)?'/assets/models-v32/'+key+'.webp?v=40':window.DFM_MODELS_V4?.[key]??'';}
+function modelSource(m,g,c){const key=m.key+'-'+g.key+'-'+(c?.key??'black');return ['white','gray'].includes(c?.key)?'/assets/models-v41/'+key+'.webp?v=41':['khaki','burgundy'].includes(c?.key)?'/assets/models-v32/'+key+'.webp?v=40':window.DFM_MODELS_V4?.[key]??'';}
 // Images are stored as compact base64 WebP/PNG wrapped in local SVG text files.
 // Some browsers block nested raster rendering inside SVG <img>; unwrap on load.
 const imageUrlCache=new Map();
@@ -97,7 +139,7 @@ function stageHtml(p,st){
  return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print${p.fullPrint?' dfm3-full-print':p.key==='nsu'?' dfm3-nsu-print':''}" style="${printStyle(st)};--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false">${p.fullPrint?'':`<span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span>`}</div><div class="dfm3-print-touch" style="${safeStyle(st)}" tabindex="0" role="group" aria-label="Move artwork with arrow keys or drag; pinch or use size slider"></div><div class="dfm3-edit-outline" aria-hidden="true"><span class="dfm3-resize-handle"></span></div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}${['khaki','burgundy'].includes(c.key)?' · preview':''}</div>`;
 }
 function galleryHtml(p,st){
- return '<div class="dfm3-photo-column">'+stageHtml(p,st)+'</div>'+ `<div class="dfm3-options-column"><p class="dfm3-options-title dfm3-current-design">${esc(p.title)}</p><div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><p class="dfm3-options-title">Garment</p><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><p class="dfm3-options-title">Model</p><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><p class="dfm3-options-title">Colour</p><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>${!productPage?'<a class="dfm3-cta dfm3-quick-product" href="'+urlFor(p,st)+'">View Product →</a>':''}</div><div class="dfm3-print-controls"><h3>Artwork Size &amp; Position</h3><label for="dfm4-scale">Artwork size</label><input id="dfm4-scale" aria-label="Artwork size" type="range" min="50" max="${Math.round(maxScale(st)*100)}" step="1" value="${Math.round(st.ps*100)}"><div class="dfm3-scale-row"><button type="button" data-scale="-1" aria-label="Decrease artwork size">−</button><output for="dfm4-scale">${Math.round(st.ps*100)}%</output><button type="button" data-scale="1" aria-label="Increase artwork size">+</button></div><div class="dfm3-direction-pad" role="group" aria-label="Move artwork"><button type="button" data-move="up" aria-label="Move print up">↑</button><button type="button" data-move="left" aria-label="Move print left">←</button><button type="button" data-move="right" aria-label="Move print right">→</button><button type="button" data-move="down" aria-label="Move print down">↓</button></div><button type="button" data-print-reset>Reset Design</button><p class="dfm3-print-hint">Pinch to resize · Drag to move</p><p class="dfm3-print-hint">Visual chest limits depend on the selected model. Final print dimensions are confirmed by SP Print.</p>${productPage?'<button type="button" data-share-config>Copy configuration link</button><p class="dfm3-print-hint" data-share-status role="status"></p>':''}</div>`;
+ return '<div class="dfm3-photo-column">'+stageHtml(p,st)+'</div>'+ `<div class="dfm3-options-column"><p class="dfm3-options-title dfm3-current-design">${esc(p.title)}</p><div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><p class="dfm3-options-title">Garment</p><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><p class="dfm3-options-title">Model</p><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><p class="dfm3-options-title">Colour</p><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>${!productPage?'<a class="dfm3-cta dfm3-quick-product" href="'+urlFor(p,st)+'">View Product →</a>':''}</div><div class="dfm3-print-controls"><h3>Artwork Size &amp; Position</h3><label for="dfm4-scale">Artwork size</label><input id="dfm4-scale" aria-label="Artwork size" type="range" min="50" max="${Math.round(maxScale(st)*100)}" step="1" value="${Math.round(st.ps*100)}"><div class="dfm3-scale-row"><button type="button" data-scale="-1" aria-label="Decrease artwork size">−</button><output for="dfm4-scale">${Math.round(st.ps*100)}%</output><button type="button" data-scale="1" aria-label="Increase artwork size">+</button></div><div class="dfm3-direction-pad" role="group" aria-label="Move artwork"><button type="button" data-move="up" aria-label="Move print up">↑</button><button type="button" data-move="left" aria-label="Move print left">←</button><button type="button" data-move="right" aria-label="Move print right">→</button><button type="button" data-move="down" aria-label="Move print down">↓</button></div><button type="button" data-print-reset>Reset Design</button><button type="button" class="dfm3-editor-open" data-editor-open>Edit Design ⤢</button><p class="dfm3-print-hint">Pinch to resize · Drag to move</p><p class="dfm3-print-hint">Visual chest limits depend on the selected model. Final print dimensions are confirmed by SP Print.</p>${productPage?'<button type="button" data-share-config>Copy configuration link</button><p class="dfm3-print-hint" data-share-status role="status"></p>':''}</div>`;
 }
 function clamp01(v){return Math.max(0,Math.min(1,v));}
 // Create a new raster preview from the registered garment photos; no CSS tint.
@@ -107,14 +149,14 @@ const lum=(d,i)=>.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];
 function loadRaster(src){return new Promise((ok,fail)=>{const im=new Image();im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=frame.w;cv.height=frame.h;const cx=cv.getContext('2d',{willReadFrequently:true});cx.drawImage(im,0,0,frame.w,frame.h);ok({cv,cx,pixels:cx.getImageData(0,0,frame.w,frame.h)})}catch(e){fail(e)}};im.onerror=fail;im.src=src})}
 function repairBeard(target,reference){const d=target.data,r=reference.data;for(let y=125;y<209;y++)for(let x=232;x<366;x++){const q=Math.sqrt(((x-299)/61)**2+((y-169)/38)**2),a=1-smooth(.68,1,q);if(a<=0)continue;const i=(y*frame.w+x)*4;for(let k=0;k<3;k++)d[i+k]=Math.round(d[i+k]*(1-a)+r[i+k]*a)}}
 // New colours use individually pre-rendered and reviewed garment photographs.
-const preparedColours=new Set(['khaki','burgundy']);
+const preparedColours=new Set(['khaki','burgundy','white','gray']);
 function recolorPortrait(m,g,c){
- if(preparedColours.has(c.key))return Promise.resolve('/assets/models-v32/'+m.key+'-'+g.key+'-'+c.key+'.webp?v=40');
+ if(preparedColours.has(c.key))return Promise.resolve(modelSource(m,g,c));
  const src=modelSource(m,g,c),repair=m.key==='george'&&g.key==='hoodie'&&c.key!=='gray';
  if(!src)return Promise.reject(new Error('Missing model preview'));
  if(!repair)return Promise.resolve(src);
  const key=m.key+'-'+g.key+'-'+c.key;
- if(!rasterCache.has(key)){const gray=modelSource(m,g,{key:'gray'});
+ if(!rasterCache.has(key)){const gray=window.DFM_MODELS_V4?.[m.key+'-'+g.key+'-gray'];
  const task=(async()=>{const [b,r]=await Promise.all([loadRaster(src),loadRaster(gray)]);repairBeard(b.pixels,r.pixels);b.cx.putImageData(b.pixels,0,0);return b.cv.toDataURL('image/png')})();rasterCache.set(key,task);task.catch(()=>rasterCache.delete(key))}
  return rasterCache.get(key);
 }
@@ -156,10 +198,26 @@ function mount(gallery,detail,p){
   const button=detail.querySelector('[data-action="enquiry"]');if(button)button.textContent=checkoutUrl(p,st)&&st.ps===1&&st.px===298&&st.py===304?'Continue to order':'Request order quote';
  }
  function movePrint(direction){const steps={left:[-4,0],right:[4,0],up:[0,-4],down:[0,4]};if(!steps[direction])return;st.px+=steps[direction][0];st.py+=steps[direction][1];applyPrint()}
+ function openEditor(){
+  if(gallery.querySelector('.dfm41-editor'))return;
+  const photo=gallery.querySelector('.dfm3-photo-column'),controls=gallery.querySelector('.dfm3-print-controls');
+  const snapshot={ps:st.ps,px:st.px,py:st.py},focus=document.activeElement,bodyOverflow=document.body.style.overflow;
+  const photoSlot=document.createComment('photo'),controlSlot=document.createComment('controls');
+  photo.before(photoSlot);controls.before(controlSlot);
+  const d=document.createElement('dialog');d.className='dfm41-editor';d.setAttribute('aria-label','Edit motorcycle artwork');
+  d.innerHTML='<header class="dfm41-editor-head"><h2>Edit Design</h2><button type="button" data-editor-cancel>Cancel</button></header><div class="dfm41-editor-actions"><button type="button" data-editor-apply>Apply Design</button></div>';
+  const footer=d.querySelector('.dfm41-editor-actions');footer.before(photo,controls);gallery.appendChild(d);
+  let applied=false;
+  d.addEventListener('close',()=>{if(!applied)Object.assign(st,snapshot);photoSlot.replaceWith(photo);controlSlot.replaceWith(controls);d.remove();document.body.style.overflow=bodyOverflow;applyPrint();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
+  d.querySelector('[data-editor-cancel]').onclick=()=>d.close();
+  d.querySelector('[data-editor-apply]').onclick=()=>{applied=true;d.close()};
+  document.body.style.overflow='hidden';d.showModal();applyPrint();
+ }
  function bindPrint(){
   const area=gallery.querySelector('.dfm3-print-touch'),portrait=gallery.querySelector('.dfm3-portrait'),slider=gallery.querySelector('.dfm3-print-controls input');
   if(!area||!portrait||!slider)return;
   slider.oninput=()=>{st.ps=Number(slider.value)/100;applyPrint()};
+  const editor=gallery.querySelector('[data-editor-open]');if(editor)editor.onclick=openEditor;
   gallery.querySelectorAll('[data-scale]').forEach(b=>b.onclick=()=>{st.ps+=Number(b.dataset.scale)*.05;applyPrint()});
   const share=gallery.querySelector('[data-share-config]');if(share)share.onclick=async()=>{const url=location.origin+urlFor(p,st),note=gallery.querySelector('[data-share-status]');try{await navigator.clipboard.writeText(url);note.textContent='Configuration link copied.'}catch{note.textContent=url;note.style.overflowWrap='anywhere'}};
   gallery.querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>movePrint(b.dataset.move));
@@ -201,8 +259,8 @@ function mount(gallery,detail,p){
   });
  }
  function changeDesign(i){if(productPage)return;st.d=(i+products.length)%products.length;p=products[st.d];stateMap.get(gallery).p=p;renderDetail();redraw()}
- gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.design!==undefined){changeDesign(+b.dataset.design);return}if(b.matches('.next')){changeDesign(st.d+1);return}if(b.matches('.prev')){changeDesign(st.d-1);return}if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else return;renderDetail();redraw()});
- let touch=null;gallery.addEventListener('touchstart',e=>{if(e.target.closest('.dfm3-stage')&&!e.target.closest('.dfm3-print-touch,.dfm3-resize-handle,button')&&e.touches.length===1)touch=[e.changedTouches[0].screenX,e.changedTouches[0].screenY]},{passive:true});
+ gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(gallery.querySelector('.dfm41-editor'))return;if(b.dataset.design!==undefined){changeDesign(+b.dataset.design);return}if(b.matches('.next')){changeDesign(st.d+1);return}if(b.matches('.prev')){changeDesign(st.d-1);return}if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else return;renderDetail();redraw()});
+ let touch=null;gallery.addEventListener('touchstart',e=>{touch=null;if(!gallery.querySelector('.dfm41-editor')&&e.target.closest('.dfm3-stage')&&!e.target.closest('.dfm3-print-touch,.dfm3-resize-handle,button')&&e.touches.length===1)touch=[e.changedTouches[0].screenX,e.changedTouches[0].screenY]},{passive:true});
  gallery.addEventListener('touchend',e=>{if(!touch)return;if(e.target.closest('.dfm3-print-touch,.dfm3-resize-handle')){touch=null;return}const dx=e.changedTouches[0].screenX-touch[0],dy=e.changedTouches[0].screenY-touch[1];touch=null;if(!productPage&&Math.abs(dx)>42&&Math.abs(dx)>Math.abs(dy)*1.3)changeDesign(st.d+(dx<0?1:-1))},{passive:true});gallery.addEventListener('touchcancel',()=>{touch=null},{passive:true});
  renderDetail();redraw();
 }

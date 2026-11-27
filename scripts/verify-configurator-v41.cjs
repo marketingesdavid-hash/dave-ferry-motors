@@ -1,0 +1,57 @@
+const {chromium}=require('playwright');const assert=require('node:assert/strict');const fs=require('node:fs');
+(async()=>{const browser=await chromium.launch();const base='http://127.0.0.1:8000';fs.mkdirSync('qa-v41',{recursive:true});fs.mkdirSync('qa-v4',{recursive:true});try{
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async t=>{window.__copied=t}},configurable:true}));
+ await page.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():r.abort());
+ const ready=async(p)=>p.waitForFunction(()=>{const g=document.querySelector('#dfm3-feature-gallery');const i=g?.querySelector('.dfm3-base');return g?.querySelectorAll('[data-color]').length===5&&!g.hasAttribute('aria-busy')&&i?.complete&&i.naturalWidth===596});
+ const pick=async(p,sel,i)=>{await p.locator('#dfm3-feature-gallery '+sel).nth(i).click();await ready(p);await p.waitForFunction(({sel,i})=>document.querySelectorAll('#dfm3-feature-gallery '+sel)[i]?.getAttribute('aria-pressed')==='true',{sel,i})};
+ const read=p=>p.locator('.dfm3-portrait').evaluate(e=>{const r=e.getBoundingClientRect(),a=e.querySelector('.dfm3-print').getBoundingClientRect(),s=e.querySelector('.dfm3-print-touch').getBoundingClientRect();return {x:(a.left-r.left)/r.width,y:(a.top-r.top)/r.height,w:a.width/r.width,h:a.height/r.height,safe:a.left>=s.left-1&&a.top>=s.top-1&&a.right<=s.right+1&&a.bottom<=s.bottom+1,src:e.querySelector('.dfm3-base').src}});
+ const scale=async(p,v)=>p.locator('#dfm4-scale').evaluate((e,v)=>{e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}))},v);
+ const out=p=>p.locator('.dfm3-scale-row output').textContent();
+ await page.goto(base+'/');await ready(page);
+ assert.equal(await page.locator('#dfm3-feature-gallery').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),3);const ckeys=['black','white','gray','khaki','burgundy'];const names=['Jack','Sophie','George','Emma'],labels=['Black','White','Grey','Military Green','Burgundy'];
+ for(let g=0;g<2;g++)for(let m=0;m<4;m++){await pick(page,'[data-garment]',g);await pick(page,'[data-model]',m);await page.locator('[data-print-reset]').click();for(let c=0;c<5;c++){await pick(page,'[data-color]',c);let r=await read(page);assert.ok(r.safe);assert.ok((await page.locator('.dfm3-stage-counter').textContent()).includes(names[m]+' · '+labels[c]));if(c>=3)assert.ok(r.src.includes('-'+ckeys[c]+'.webp?v=40'));else if(c===1||c===2)assert.ok(r.src.includes('/assets/models-v41/'));else assert.ok(r.src.startsWith('data:image/'));}}
+ await pick(page,'[data-model]',2);await pick(page,'[data-garment]',0);await pick(page,'[data-color]',4);await pick(page,'[data-design]',1);
+ await page.locator('[data-print-reset]').click();const initial=await read(page);
+ await page.locator('[data-scale="1"]').click();assert.equal(await out(page),'105%');await page.locator('[data-scale="-1"]').click();assert.equal(await out(page),'100%');await scale(page,135);assert.equal(await out(page),'135%');const big=await read(page);assert.ok(big.w>initial.w&&big.safe);assert.ok(Math.abs(big.w/big.h-initial.w/initial.h)<.002);
+ await scale(page,80);let b=await page.locator('.dfm3-print-touch').boundingBox();let before=await read(page);await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+12,b.y+b.height/2+10,{steps:5});await page.mouse.up();let after=await read(page);assert.ok(after.x>before.x&&after.y>before.y&&after.safe);
+ await page.locator('.dfm3-print-touch').focus();await page.keyboard.press('ArrowLeft');assert.ok((await read(page)).x<after.x);
+ const handle=page.locator('.dfm3-resize-handle');await page.locator('.dfm3-portrait').hover();const hb=await handle.boundingBox();const oldWidth=(await read(page)).w;await page.mouse.move(hb.x+hb.width/2,hb.y+hb.height/2);await page.mouse.down();await page.mouse.move(hb.x+hb.width/2+10,hb.y+hb.height/2+6,{steps:4});await page.mouse.up();assert.ok((await read(page)).w>oldWidth);
+ await scale(page,85);await page.locator('[data-move="down"]').click();const saved=await read(page);await pick(page,'[data-color]',3);const unchanged=await read(page);assert.ok(Math.abs(saved.x-unchanged.x)<.001&&Math.abs(saved.w-unchanged.w)<.001);
+ await pick(page,'[data-color]',4);const link=await page.locator('.dfm3-quick-product').getAttribute('href');assert.ok(link.includes('nx=')&&link.includes('ny=')&&link.includes('ps='));await page.locator('#dfm3-feature-gallery').screenshot({path:'qa-v41/desktop.jpg',type:'jpeg',quality:75});
+ await page.goto(base+link);await ready(page);assert.equal(await out(page),'85%');const restored=await read(page);assert.ok(Math.abs(restored.x-saved.x)<.001&&Math.abs(restored.y-saved.y)<.001);
+ await page.locator('#dfm3-size-home').selectOption('M');await page.locator('#dfm3-qty').fill('2');await page.locator('[data-action="copy"]').click();await page.waitForFunction(()=>window.__copied?.includes('Print centre (normalized)'));const order=await page.evaluate(()=>window.__copied);assert.ok(order.includes('Colour: Burgundy')&&order.includes('Print scale: 85%')&&order.includes('Size: M')&&order.includes('Quantity: 2'));
+ await page.locator('[data-share-config]').click();await page.waitForFunction(()=>window.__copied?.startsWith('http'));const share=await page.evaluate(()=>window.__copied);assert.ok(share.includes('size=M')&&share.includes('qty=2'));
+ await page.goto(share);await ready(page);assert.equal(await page.locator('#dfm3-size-home').inputValue(),'M');assert.equal(await page.locator('#dfm3-qty').inputValue(),'2');
+ for(const p of ["harley-davidson-police-custom","moto-guzzi-v7-special-1971","henderson-de-luxe-phenix-1928","bmw-r18-sidecar-2021","moto-guzzi-california-1100i-custom","green-harley-davidson-custom-2010","chrome-harley-davidson-softail-custom-2010","nsu-500-1t-1930","moto-guzzi-arancia-meccanica-2018"]){await page.goto(base+'/shop/'+p+'/?color=burgundy');await ready(page);assert.ok((await page.locator('.dfm3-stage-counter').textContent()).includes('Burgundy'))}
+ const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});mobile.on('pageerror',e=>errors.push(e.message));await mobile.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():r.abort());
+ await mobile.goto(base+'/');await ready(mobile);await pick(mobile,'[data-model]',2);await pick(mobile,'[data-garment]',1);await pick(mobile,'[data-color]',3);await pick(mobile,'[data-design]',1);await mobile.locator('[data-print-reset]').click();await scale(mobile,75);
+ const cdp=await mobile.context().newCDPSession(mobile);await mobile.locator('.dfm3-stage').scrollIntoViewIfNeeded();const box=await mobile.locator('.dfm3-print-touch').boundingBox();const cx=box.x+box.width/2,cy=box.y+box.height/2;const tp=(x,y,id)=>({x,y,id,radiusX:2,radiusY:2,force:1});
+ const send=(type,touchPoints)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints});
+ const pre=await read(mobile),title=await mobile.locator('#latest-design-title').textContent();
+ await send('touchStart',[tp(cx-12,cy,1),tp(cx+12,cy,2)]);await send('touchMove',[tp(cx-20,cy,1),tp(cx+20,cy,2)]);await send('touchEnd',[]);assert.ok((await read(mobile)).w>pre.w);assert.equal(await mobile.locator('#latest-design-title').textContent(),title);
+ await scale(mobile,75);const p0=await read(mobile);await send('touchStart',[tp(cx,cy,1)]);await send('touchMove',[tp(cx+10,cy+10,1)]);await send('touchEnd',[]);const p1=await read(mobile);assert.ok(p1.x>p0.x&&p1.y>p0.y&&p1.safe);assert.equal(await mobile.locator('#latest-design-title').textContent(),title);
+ await mobile.locator('[data-print-reset]').click();assert.equal(await out(mobile),'100%');
+ await scale(mobile,180);assert.ok((await read(mobile)).safe);
+ await pick(mobile,'[data-model]',1);assert.ok((await read(mobile)).safe);assert.ok(Number((await out(mobile)).replace('%',''))<=113);
+ await pick(mobile,'[data-model]',2);await mobile.locator('[data-print-reset]').click();await scale(mobile,130);
+ assert.ok(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+ await mobile.locator('#dfm3-feature-gallery').screenshot({path:'qa-v41/mobile.jpg',type:'jpeg',quality:80});
+ for(const viewport of [{width:360,height:640},{width:390,height:844},{width:430,height:932}]){
+  await mobile.setViewportSize(viewport);
+  const ordered=await mobile.locator('#dfm3-feature-gallery').evaluate(g=>({photo:g.querySelector('.dfm3-photo-column').getBoundingClientRect().bottom,controls:g.querySelector('.dfm3-print-controls').getBoundingClientRect().top,options:g.querySelector('.dfm3-options-column').getBoundingClientRect().top}));assert.ok(ordered.photo<=ordered.controls+2&&ordered.controls<ordered.options);
+  await mobile.locator('[data-print-reset]').click();await scale(mobile,80);const before=await read(mobile);
+  await mobile.locator('[data-editor-open]').click();await mobile.locator('.dfm41-editor').waitFor();
+  assert.ok(await mobile.locator('.dfm41-editor').evaluate(d=>{const p=d.querySelector('.dfm3-portrait').getBoundingClientRect(),s=d.querySelector('input[type=range]').getBoundingClientRect(),a=d.querySelector('[data-editor-apply]').getBoundingClientRect();return p.top>=-1&&p.bottom<=innerHeight+1&&s.top>=0&&s.bottom<=innerHeight+1&&a.bottom<=innerHeight+1}),'Editor picture and controls must fit viewport');
+  await mobile.locator('[data-scale="1"]').click();await mobile.locator('[data-move="right"]').click();await mobile.locator('[data-move="down"]').click();const edited=await read(mobile);assert.ok(edited.w>before.w&&edited.safe);
+  await mobile.locator('[data-editor-cancel]').click();await mobile.locator('.dfm41-editor').waitFor({state:'detached'});assert.equal(await out(mobile),'80%');assert.ok(Math.abs((await read(mobile)).x-before.x)<.001);
+  await mobile.locator('[data-editor-open]').click();await scale(mobile,90);const mid=await read(mobile);
+  await mobile.locator('[data-move="left"]').click();assert.ok((await read(mobile)).x<mid.x);
+  await mobile.locator('[data-move="right"]').click();assert.ok((await read(mobile)).x>(mid.x-.001));
+  await mobile.locator('[data-move="down"]').click();const down=await read(mobile);
+  await mobile.locator('[data-move="up"]').click();assert.ok((await read(mobile)).y<down.y);
+  await mobile.screenshot({path:'qa-v41/editor-'+viewport.width+'.jpg',type:'jpeg',quality:85});
+  await mobile.locator('[data-editor-apply]').click();await mobile.locator('.dfm41-editor').waitFor({state:'detached'});assert.equal(await out(mobile),'90%');
+ }
+
+ assert.deepEqual(errors,[]);console.log('PASS: 40 colour combinations, nine direct pages, mouse resize/drag, CDP touch pinch/drag, safe bounds, URL and quote restoration');
+ }finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});

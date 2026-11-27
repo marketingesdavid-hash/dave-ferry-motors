@@ -30,7 +30,7 @@ const fs=require('node:fs');
     assert.equal(data.count,1);assert.ok(data.loaded);
     assert.equal(data.counter,labels[m]+' · '+colours[c]+' '+garments[g]+(c>=3?' · preview':''));
     if(c>=3)assert.ok(data.src.includes('/assets/models-v32/'+keys[m]+'-'+gkeys[g]+'-'+ckeys[c]+'.webp?v=40'));
-    else assert.ok(data.src.startsWith('data:image/'));
+    else if(c===1||c===2)assert.ok(data.src.includes('/assets/models-v41/'));else assert.ok(data.src.startsWith('data:image/'));
     if(!reference)reference=data.coords;data.coords.forEach((v,j)=>assert.ok(Math.abs(v-reference[j])<.003,'Print anchor/width changed'));
     assert.equal(data.printSrc,initialPrint,'Motorcycle art changed when only garment colour changed');
     unique.add(data.src);
