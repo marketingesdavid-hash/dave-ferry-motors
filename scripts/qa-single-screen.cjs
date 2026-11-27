@@ -13,7 +13,7 @@ const fs = require('node:fs');
    await g.locator('.dfm3-base').waitFor();
    await page.waitForFunction(()=>document.querySelector('.dfm3-base')?.naturalWidth>0);
    const open=g.locator('[data-editor-open]');
-   if(!await open.isVisible()) { console.log('No inline editor button at',w,h,path);await page.close();continue; }
+   assert.ok(await open.isVisible(),'Editor button hidden at '+w+'x'+h+' '+path);
    await open.click();
    const d=page.locator('.dfm41-editor[open]');
    await d.waitFor();

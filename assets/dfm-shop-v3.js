@@ -160,6 +160,7 @@ function installPrintCss(){const style=document.createElement('style');style.tex
  .dfm41-editor .dfm3-print-controls [data-print-reset]{grid-column:1/-1;width:100%;min-height:32px}
 }
 @media(max-height:500px) and (orientation:landscape){
+ .dfm3-gallery>.dfm3-print-controls [data-editor-open]{display:block;width:100%;background:#a2d49c;color:#172017;font-weight:750}
  .dfm41-editor[open]{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;gap:3px;overflow:hidden}
  .dfm41-editor .dfm41-editor-head{grid-row:1;grid-column:1/-1}
  .dfm41-editor .dfm3-photo-column{grid-column:1;grid-row:2/4;height:100%}
