@@ -118,6 +118,65 @@ function installPrintCss(){const style=document.createElement('style');style.tex
  .dfm41-editor-head,.dfm41-editor-actions{grid-column:1/-1;width:100%;max-width:none}
  .dfm41-editor .dfm3-stage{width:min(100%,calc(max(100px,100dvh - 120px)*596/653))}
 }
+
+/* Mobile: all configuration controls share the same viewport as the preview. */
+.dfm3-mobile-design{display:none}
+@media(max-width:600px){
+ .dfm3-gallery{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:6px;align-items:start}
+ .dfm3-gallery>.dfm3-photo-column{grid-column:1;grid-row:1;order:0}
+ .dfm3-gallery>.dfm3-options-column{grid-column:2;grid-row:1;order:0}
+ .dfm3-gallery>.dfm3-print-controls{grid-column:1/-1;grid-row:2;order:0}
+ .dfm3-gallery>.dfm3-photo-column .dfm3-stage{width:100%;max-width:100%}
+ .dfm3-gallery .dfm3-stage-counter{padding:3px 0;font-size:.68rem;line-height:1.15}
+ .dfm3-gallery .dfm3-options-title,.dfm41-editor .dfm3-options-title{display:none}
+ .dfm3-gallery .dfm3-design-strip,.dfm3-gallery .dfm3-design-label,.dfm41-editor .dfm3-design-strip,.dfm41-editor .dfm3-design-label{display:none}
+ .dfm3-mobile-design{display:block;width:100%;min-width:0;height:36px;font-size:12px;background:#20251e;color:#f5e5c5;border:1px solid #75866a;border-radius:6px;padding:3px}
+ .dfm3-gallery .dfm3-garments,.dfm3-gallery .dfm3-mini-models,.dfm3-gallery .dfm3-colors,.dfm41-editor .dfm3-garments,.dfm41-editor .dfm3-mini-models,.dfm41-editor .dfm3-colors{margin:4px 0!important;gap:4px}
+ .dfm3-gallery .dfm3-garments button,.dfm3-gallery .dfm3-mini-models button,.dfm41-editor .dfm3-garments button,.dfm41-editor .dfm3-mini-models button{min-height:36px;padding:3px;font-size:12px}
+ .dfm3-gallery .dfm3-mini-models{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .dfm3-gallery .dfm3-colors,.dfm41-editor .dfm3-colors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+ .dfm3-gallery .dfm3-color,.dfm41-editor .dfm3-color{display:flex;justify-content:center;min-width:0;min-height:36px;padding:2px;border-radius:6px;gap:0}
+ .dfm3-gallery .dfm3-color .dfm3-swatch,.dfm41-editor .dfm3-color .dfm3-swatch{flex:0 0 17px;width:17px;height:17px}
+ .dfm3-gallery .dfm3-color .dfm3-color-label,.dfm41-editor .dfm3-color .dfm3-color-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .dfm3-gallery .dfm3-quick-product{min-height:36px;font-size:11px;padding:5px;margin:4px 0 0}
+ .dfm3-gallery>.dfm3-print-controls,.dfm41-editor .dfm3-print-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:4px;padding:4px 6px}
+ .dfm3-gallery>.dfm3-print-controls h3,.dfm3-gallery>.dfm3-print-controls .dfm3-print-hint,.dfm41-editor .dfm3-print-controls h3{display:none}
+ .dfm3-gallery>.dfm3-print-controls input,.dfm41-editor .dfm3-print-controls input{grid-column:1/-1;min-height:20px}
+ .dfm3-gallery .dfm3-scale-row,.dfm41-editor .dfm3-scale-row{gap:3px}
+ .dfm3-gallery .dfm3-direction-pad,.dfm41-editor .dfm3-direction-pad{gap:3px}
+ .dfm3-gallery .dfm3-print-controls button,.dfm41-editor .dfm3-print-controls button{min-width:0;min-height:36px;padding:3px 5px;font-size:12px}
+ .dfm3-gallery .dfm3-scale-row button,.dfm3-gallery .dfm3-direction-pad button,.dfm41-editor .dfm3-scale-row button,.dfm41-editor .dfm3-direction-pad button{flex:1}
+ .dfm3-gallery>.dfm3-print-controls [data-print-reset]{width:100%}
+ .dfm3-gallery>.dfm3-print-controls [data-editor-open]{width:100%}
+ .dfm3-gallery>.dfm3-print-controls [data-share-config]{grid-column:1/-1}
+ .dfm3-gallery>.dfm3-print-controls [data-share-status]:not(:empty){display:block;grid-column:1/-1}
+ .dfm41-editor[open]{display:flex;overflow:hidden;gap:4px;padding:4px 8px max(4px,env(safe-area-inset-bottom))}
+ .dfm41-editor .dfm41-editor-head,.dfm41-editor .dfm41-editor-actions{min-height:36px}
+ .dfm41-editor .dfm41-editor-head button,.dfm41-editor .dfm41-editor-actions button{min-height:36px;padding:3px 8px;font-size:13px}
+ .dfm41-editor .dfm3-options-column{width:min(100%,520px);flex:none}
+ .dfm41-editor .dfm3-mini-models{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .dfm41-editor .dfm3-quick-product{display:none!important}
+ .dfm41-editor .dfm3-photo-column{min-height:0;flex:1}
+ .dfm41-editor .dfm3-print-controls [data-print-reset]{grid-column:1/-1;width:100%;min-height:32px}
+}
+@media(max-height:500px) and (orientation:landscape){
+ .dfm41-editor[open]{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;gap:3px;overflow:hidden}
+ .dfm41-editor .dfm41-editor-head{grid-row:1;grid-column:1/-1}
+ .dfm41-editor .dfm3-photo-column{grid-column:1;grid-row:2/4;height:100%}
+ .dfm41-editor .dfm3-options-column{grid-column:2;grid-row:2;align-self:start;min-width:0}
+ .dfm41-editor .dfm3-print-controls{grid-column:2;grid-row:3}
+ .dfm41-editor .dfm41-editor-actions{grid-row:4;grid-column:1/-1}
+ .dfm41-editor .dfm3-options-title,.dfm41-editor .dfm3-design-strip,.dfm41-editor .dfm3-design-label,.dfm41-editor .dfm3-quick-product{display:none!important}
+ .dfm41-editor .dfm3-mobile-design{display:block;width:100%;height:30px}
+ .dfm41-editor .dfm3-garments,.dfm41-editor .dfm3-mini-models,.dfm41-editor .dfm3-colors{margin:3px 0!important;gap:3px}
+ .dfm41-editor .dfm3-garments button,.dfm41-editor .dfm3-mini-models button,.dfm41-editor .dfm3-color{min-height:30px;padding:3px;font-size:11px}
+ .dfm41-editor .dfm3-colors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+ .dfm41-editor .dfm3-color{justify-content:center;gap:0}
+ .dfm41-editor .dfm3-color-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .dfm41-editor .dfm3-print-controls{display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:3px}
+ .dfm41-editor .dfm3-print-controls input,.dfm41-editor .dfm3-print-controls [data-print-reset]{grid-column:1/-1}
+ .dfm41-editor .dfm3-print-controls button{min-height:30px;min-width:0;padding:2px 4px}
+}
 `;document.body.appendChild(style)}
 installPrintCss();
 function correctedPhoto(m,g,c){return ['white','gray'].includes(c.key)||m.key==='george'&&g.key==='hoodie'}
@@ -140,7 +199,7 @@ function stageHtml(p,st){
  return `<div class="dfm3-stage" role="group" aria-label="Swipe to view different motorcycle designs"><div class="dfm3-portrait"><img class="dfm3-base" src="${src}" alt="${m.label} wearing a ${c.label.toLowerCase()} ${g.label.toLowerCase()}" draggable="false"><div class="dfm3-print${p.fullPrint?' dfm3-full-print':p.key==='nsu'?' dfm3-nsu-print':''}" style="${printStyle(st)};--ink-on-shirt:${ink}"><img src="${p.print}" alt="" draggable="false">${p.fullPrint?'':`<span class="dfm3-print-name">${p.info}</span><span class="dfm3-print-domain">daveferrymotors.com</span>`}</div><div class="dfm3-print-touch" style="${safeStyle(st)}" tabindex="0" role="group" aria-label="Move artwork with arrow keys or drag; pinch or use size slider"></div><div class="dfm3-edit-outline" aria-hidden="true"><span class="dfm3-resize-handle"></span></div></div><button class="dfm3-carousel-btn prev" type="button" aria-label="Previous design"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="dfm3-carousel-btn next" type="button" aria-label="Next design"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div><div class="dfm3-stage-counter" aria-live="polite">${m.label} · ${c.label} ${g.label}${['khaki','burgundy'].includes(c.key)?' · preview':''}</div>`;
 }
 function galleryHtml(p,st){
- return '<div class="dfm3-photo-column">'+stageHtml(p,st)+'</div>'+ `<div class="dfm3-options-column"><p class="dfm3-options-title dfm3-current-design">${esc(p.title)}</p><div class="dfm3-design-label">Choose motorcycle design</div><div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><p class="dfm3-options-title">Garment</p><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><p class="dfm3-options-title">Model</p><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><p class="dfm3-options-title">Colour</p><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span>${c.label}</button>`).join('')}</div>${!productPage?'<a class="dfm3-cta dfm3-quick-product" href="'+urlFor(p,st)+'">View Product →</a>':''}</div><div class="dfm3-print-controls"><h3>Artwork Size &amp; Position</h3><label for="dfm4-scale">Artwork size</label><input id="dfm4-scale" aria-label="Artwork size" type="range" min="50" max="${Math.round(maxScale(st)*100)}" step="1" value="${Math.round(st.ps*100)}"><div class="dfm3-scale-row"><button type="button" data-scale="-1" aria-label="Decrease artwork size">−</button><output for="dfm4-scale">${Math.round(st.ps*100)}%</output><button type="button" data-scale="1" aria-label="Increase artwork size">+</button></div><div class="dfm3-direction-pad" role="group" aria-label="Move artwork"><button type="button" data-move="up" aria-label="Move print up">↑</button><button type="button" data-move="left" aria-label="Move print left">←</button><button type="button" data-move="right" aria-label="Move print right">→</button><button type="button" data-move="down" aria-label="Move print down">↓</button></div><button type="button" data-print-reset>Reset Design</button><button type="button" class="dfm3-editor-open" data-editor-open>Edit Design ⤢</button><p class="dfm3-print-hint">Pinch to resize · Drag to move</p><p class="dfm3-print-hint">Visual chest limits depend on the selected model. Final print dimensions are confirmed by SP Print.</p>${productPage?'<button type="button" data-share-config>Copy configuration link</button><p class="dfm3-print-hint" data-share-status role="status"></p>':''}</div>`;
+ return '<div class="dfm3-photo-column">'+stageHtml(p,st)+'</div>'+ `<div class="dfm3-options-column"><p class="dfm3-options-title dfm3-current-design">${esc(p.title)}</p><div class="dfm3-design-label">Choose motorcycle design</div>${productPage?'':`<select class="dfm3-mobile-design" aria-label="Choose motorcycle design">${products.map((v,i)=>`<option value="${i}" ${v.key===p.key?'selected':''}>${esc(v.title)}</option>`).join('')}</select>`}<div class="dfm3-design-strip" aria-label="Choose motorcycle design">${products.map((v,i)=>`<button type="button" data-design="${i}" aria-pressed="${v.key===p.key}" aria-label="${v.title}" title="${v.title}"><img src="${v.art}" alt="" draggable="false"><span>${v.title}</span></button>`).join('')}</div><p class="dfm3-options-title">Garment</p><div class="dfm3-garments" aria-label="Choose clothing type">${garments.map((g,i)=>`<button type="button" data-garment="${i}" aria-pressed="${i===st.g}">${g.label}</button>`).join('')}</div><p class="dfm3-options-title">Model</p><div class="dfm3-mini-models" aria-label="Choose model">${models.map((m,i)=>`<button type="button" data-model="${i}" aria-pressed="${i===st.m}">${m.label}</button>`).join('')}</div><p class="dfm3-options-title">Colour</p><div class="dfm3-colors" aria-label="Choose clothing colour">${colors.map((c,i)=>`<button type="button" class="dfm3-color" aria-label="${c.label}" title="${c.label}" data-color="${i}" aria-pressed="${i===st.c}"><span class="dfm3-swatch" style="background:${c.hex}"></span><span class="dfm3-color-label">${c.label}</span></button>`).join('')}</div>${!productPage?'<a class="dfm3-cta dfm3-quick-product" href="'+urlFor(p,st)+'">View Product →</a>':''}</div><div class="dfm3-print-controls"><h3>Artwork Size &amp; Position</h3><label for="dfm4-scale">Artwork size</label><input id="dfm4-scale" aria-label="Artwork size" type="range" min="50" max="${Math.round(maxScale(st)*100)}" step="1" value="${Math.round(st.ps*100)}"><div class="dfm3-scale-row"><button type="button" data-scale="-1" aria-label="Decrease artwork size">−</button><output for="dfm4-scale">${Math.round(st.ps*100)}%</output><button type="button" data-scale="1" aria-label="Increase artwork size">+</button></div><div class="dfm3-direction-pad" role="group" aria-label="Move artwork"><button type="button" data-move="up" aria-label="Move print up">↑</button><button type="button" data-move="left" aria-label="Move print left">←</button><button type="button" data-move="right" aria-label="Move print right">→</button><button type="button" data-move="down" aria-label="Move print down">↓</button></div><button type="button" data-print-reset>Reset Design</button><button type="button" class="dfm3-editor-open" data-editor-open>Edit Design ⤢</button><p class="dfm3-print-hint">Pinch to resize · Drag to move</p><p class="dfm3-print-hint">Visual chest limits depend on the selected model. Final print dimensions are confirmed by SP Print.</p>${productPage?'<button type="button" data-share-config>Copy configuration link</button><p class="dfm3-print-hint" data-share-status role="status"></p>':''}</div>`;
 }
 function clamp01(v){return Math.max(0,Math.min(1,v));}
 // Every corrected light and George hoodie photo is stored as a reviewed static asset.
@@ -186,18 +245,18 @@ function mount(gallery,detail,p){
  function movePrint(direction){const steps={left:[-4,0],right:[4,0],up:[0,-4],down:[0,4]};if(!steps[direction])return;st.px+=steps[direction][0];st.py+=steps[direction][1];applyPrint()}
  function openEditor(){
   if(gallery.querySelector('.dfm41-editor'))return;
-  const photo=gallery.querySelector('.dfm3-photo-column'),controls=gallery.querySelector('.dfm3-print-controls');
-  const snapshot={ps:st.ps,px:st.px,py:st.py},focus=document.activeElement,bodyOverflow=document.body.style.overflow;
-  const photoSlot=document.createComment('photo'),controlSlot=document.createComment('controls');
-  photo.before(photoSlot);controls.before(controlSlot);
+  const photo=gallery.querySelector('.dfm3-photo-column'),controls=gallery.querySelector('.dfm3-print-controls'),options=gallery.querySelector('.dfm3-options-column');
+  const snapshot={...st},originalProduct=p,focus=document.activeElement,bodyOverflow=document.body.style.overflow;
+  const photoSlot=document.createComment('photo'),controlSlot=document.createComment('controls'),optionsSlot=document.createComment('options');
+  photo.before(photoSlot);controls.before(controlSlot);options.before(optionsSlot);
   const d=document.createElement('dialog');d.className='dfm41-editor';d.setAttribute('aria-label','Edit motorcycle artwork');
   d.innerHTML='<header class="dfm41-editor-head"><h2>Edit Design</h2><button type="button" data-editor-cancel>Cancel</button></header><div class="dfm41-editor-actions"><button type="button" data-editor-apply>Apply Design</button></div>';
-  const footer=d.querySelector('.dfm41-editor-actions');footer.before(photo,controls);gallery.appendChild(d);const fitPhoto=()=>{const available=photo.clientHeight-photo.querySelector('.dfm3-stage-counter').offsetHeight-6;const stage=photo.querySelector('.dfm3-stage');if(available>0)stage.style.width=Math.min(photo.clientWidth,available*frame.w/frame.h,520)+'px'};const observer=new ResizeObserver(fitPhoto);observer.observe(photo);
+  const footer=d.querySelector('.dfm41-editor-actions');footer.before(photo,options,controls);gallery.appendChild(d);const fitPhoto=()=>{const available=photo.clientHeight-photo.querySelector('.dfm3-stage-counter').offsetHeight-6;const stage=photo.querySelector('.dfm3-stage');if(available>0)stage.style.width=Math.min(photo.clientWidth,available*frame.w/frame.h,520)+'px'};const observer=new ResizeObserver(fitPhoto);observer.observe(photo);
   let applied=false;
-  d.addEventListener('close',()=>{observer.disconnect();photo.querySelector('.dfm3-stage').style.removeProperty('width');if(!applied)Object.assign(st,snapshot);photoSlot.replaceWith(photo);controlSlot.replaceWith(controls);d.remove();document.body.style.overflow=bodyOverflow;applyPrint();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
+  d.addEventListener('close',()=>{observer.disconnect();photo.querySelector('.dfm3-stage')?.style.removeProperty('width');if(!applied){Object.assign(st,snapshot);p=originalProduct;stateMap.get(gallery).p=p}photoSlot.replaceWith(photo);optionsSlot.replaceWith(options);controlSlot.replaceWith(controls);d.remove();document.body.style.overflow=bodyOverflow;renderDetail();redraw();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
   d.querySelector('[data-editor-cancel]').onclick=()=>d.close();
   d.querySelector('[data-editor-apply]').onclick=()=>{applied=true;d.close()};
-  document.body.style.overflow='hidden';d.showModal();fitPhoto();applyPrint();
+  d.dfmFitPhoto=fitPhoto;document.body.style.overflow='hidden';d.showModal();fitPhoto();applyPrint();
  }
  function bindPrint(){
   const area=gallery.querySelector('.dfm3-print-touch'),portrait=gallery.querySelector('.dfm3-portrait'),slider=gallery.querySelector('.dfm3-print-controls input');
@@ -231,7 +290,7 @@ function mount(gallery,detail,p){
    img.src=url;await img.decode();
    if(version!==redrawVersion||!gallery.isConnected)return;
    // One atomic DOM replacement: no intermediate old/new garment superposition.
-   gallery.replaceChildren(...pending.childNodes);gallery.removeAttribute('aria-busy');lastGood={...selected,p:selectedProduct};
+   const editor=gallery.querySelector('.dfm41-editor');if(editor){for(const cls of ['.dfm3-photo-column','.dfm3-options-column','.dfm3-print-controls']){const target=editor.querySelector(cls),next=pending.querySelector(cls);target.replaceChildren(...next.childNodes)}editor.dfmFitPhoto?.()}else gallery.replaceChildren(...pending.childNodes);gallery.removeAttribute('aria-busy');lastGood={...selected,p:selectedProduct};
    const strip=gallery.querySelector('.dfm3-design-strip');strip.scrollLeft=left;
    const chosen=strip.querySelector('[aria-pressed="true"]');if(chosen){const b=chosen.getBoundingClientRect(),v=strip.getBoundingClientRect();if(b.left<v.left)strip.scrollLeft-=v.left-b.left+4;else if(b.right>v.right)strip.scrollLeft+=b.right-v.right+4}
    hydrateImages(gallery);bindPrint();
@@ -245,7 +304,8 @@ function mount(gallery,detail,p){
   });
  }
  function changeDesign(i){if(productPage)return;st.d=(i+products.length)%products.length;p=products[st.d];stateMap.get(gallery).p=p;renderDetail();redraw()}
- gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(gallery.querySelector('.dfm41-editor'))return;if(b.dataset.design!==undefined){changeDesign(+b.dataset.design);return}if(b.matches('.next')){changeDesign(st.d+1);return}if(b.matches('.prev')){changeDesign(st.d-1);return}if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else return;renderDetail();redraw()});
+ gallery.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.design!==undefined){changeDesign(+b.dataset.design);return}if(b.matches('.next')){changeDesign(st.d+1);return}if(b.matches('.prev')){changeDesign(st.d-1);return}if(b.dataset.model!==undefined)st.m=+b.dataset.model;else if(b.dataset.color!==undefined)st.c=+b.dataset.color;else if(b.dataset.garment!==undefined)st.g=+b.dataset.garment;else return;renderDetail();redraw()});
+ gallery.addEventListener('change',e=>{if(e.target.matches('.dfm3-mobile-design'))changeDesign(Number(e.target.value))});
  let touch=null;gallery.addEventListener('touchstart',e=>{touch=null;if(!gallery.querySelector('.dfm41-editor')&&e.target.closest('.dfm3-stage')&&!e.target.closest('.dfm3-print-touch,.dfm3-resize-handle,button')&&e.touches.length===1)touch=[e.changedTouches[0].screenX,e.changedTouches[0].screenY]},{passive:true});
  gallery.addEventListener('touchend',e=>{if(!touch)return;if(e.target.closest('.dfm3-print-touch,.dfm3-resize-handle')){touch=null;return}const dx=e.changedTouches[0].screenX-touch[0],dy=e.changedTouches[0].screenY-touch[1];touch=null;if(!productPage&&Math.abs(dx)>42&&Math.abs(dx)>Math.abs(dy)*1.3)changeDesign(st.d+(dx<0?1:-1))},{passive:true});gallery.addEventListener('touchcancel',()=>{touch=null},{passive:true});
  renderDetail();redraw();
