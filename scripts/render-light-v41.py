@@ -2,7 +2,7 @@ from pathlib import Path
 import base64,io,json
 import numpy as np
 from PIL import Image,ImageDraw
-from scipy.ndimage import gaussian_filter,binary_fill_holes
+from scipy.ndimage import gaussian_filter,binary_fill_holes,binary_closing
 root=Path(__file__).resolve().parents[1]
 src=json.loads((root/'assets/models-v4.js').read_text().split('Object.freeze(',1)[1].rsplit(')',1)[0])
 out=root/'assets/models-v41';out.mkdir(exist_ok=True)
@@ -23,11 +23,15 @@ for m in ('jack','sophie','george','emma'):
   # intersect their changes and exclude original blue denim and skin.
   delta=np.minimum(np.max(abs(khaki-black),axis=2),np.max(abs(burgundy-black),axis=2))
   alpha=smooth(2,25,delta)
+  # Close small internal holes in the approved fabric mask; these otherwise appear as black spots on light cloth.
+  interior=binary_fill_holes(binary_closing(alpha>.65,iterations=3))
+  alpha=np.maximum(alpha,interior.astype(np.float32))
   l=black@np.array([.2126,.7152,.0722],dtype=np.float32)
   y,x=np.ogrid[:653,:596]
   blue=(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(y>420)
   skin=(black[:,:,0]-black[:,:,2]>32)&(l>60)
   alpha[blue|skin]=0
+  # In the middle of solid cloth, remove small spots caused by prior recolouring masks.
   alpha[y.repeat(596,axis=1)<175]=0
   alpha=np.clip(gaussian_filter(alpha,.4),0,1);alpha[blue|skin]=0
   base=black.copy()

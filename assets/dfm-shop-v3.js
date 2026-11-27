@@ -82,11 +82,11 @@ function installPrintCss(){const style=document.createElement('style');style.tex
 .dfm41-editor[open]{display:flex;flex-direction:column;align-items:center;gap:6px}
 .dfm41-editor::backdrop{background:#10120f}
 .dfm41-editor-head,.dfm41-editor-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;width:min(100%,520px);flex:none}
-.dfm41-editor-head h2{font-size:1.05rem;margin:0}
+.dfm41-editor .dfm41-editor-head{border:0;position:static;background:none;padding:0;min-height:0}.dfm41-editor .dfm41-editor-head h2{font-size:1.05rem;line-height:1.15;margin:0;padding:0}
 .dfm41-editor-actions button,.dfm41-editor-head button{font:inherit;color:#f5e5c5;background:#263528;border:1px solid #75866a;border-radius:6px;min-height:42px;padding:5px 12px}
 .dfm41-editor-actions button[data-editor-apply]{background:#a2d49c;color:#172017;font-weight:800;flex:1}
-.dfm41-editor .dfm3-photo-column{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.dfm41-editor .dfm3-stage{width:min(100%,calc(max(110px,100dvh - 270px)*596/653));max-width:520px;margin:0 auto}
+.dfm41-editor .dfm3-photo-column{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.dfm41-editor .dfm3-stage{width:min(100%,calc(max(110px,100dvh - 285px)*596/653));max-width:520px;flex:none;margin:0 auto;aspect-ratio:596/653}.dfm41-editor .dfm3-portrait{height:100%;width:100%;aspect-ratio:596/653;flex:none}.dfm41-editor .dfm3-base{object-fit:contain!important}
 .dfm41-editor .dfm3-stage-counter{font-size:.7rem;line-height:1.1;margin:4px 0 0}
 .dfm41-editor .dfm3-carousel-btn,.dfm41-editor .dfm3-editor-open,.dfm41-editor [data-share-config],.dfm41-editor [data-share-status]{display:none!important}
 .dfm41-editor .dfm3-print-controls{width:min(100%,520px);box-sizing:border-box;flex:none}
@@ -206,12 +206,12 @@ function mount(gallery,detail,p){
   photo.before(photoSlot);controls.before(controlSlot);
   const d=document.createElement('dialog');d.className='dfm41-editor';d.setAttribute('aria-label','Edit motorcycle artwork');
   d.innerHTML='<header class="dfm41-editor-head"><h2>Edit Design</h2><button type="button" data-editor-cancel>Cancel</button></header><div class="dfm41-editor-actions"><button type="button" data-editor-apply>Apply Design</button></div>';
-  const footer=d.querySelector('.dfm41-editor-actions');footer.before(photo,controls);gallery.appendChild(d);
+  const footer=d.querySelector('.dfm41-editor-actions');footer.before(photo,controls);gallery.appendChild(d);const fitPhoto=()=>{const available=photo.clientHeight-photo.querySelector('.dfm3-stage-counter').offsetHeight-6;const stage=photo.querySelector('.dfm3-stage');if(available>0)stage.style.width=Math.min(photo.clientWidth,available*frame.w/frame.h,520)+'px'};const observer=new ResizeObserver(fitPhoto);observer.observe(photo);
   let applied=false;
-  d.addEventListener('close',()=>{if(!applied)Object.assign(st,snapshot);photoSlot.replaceWith(photo);controlSlot.replaceWith(controls);d.remove();document.body.style.overflow=bodyOverflow;applyPrint();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
+  d.addEventListener('close',()=>{observer.disconnect();photo.querySelector('.dfm3-stage').style.removeProperty('width');if(!applied)Object.assign(st,snapshot);photoSlot.replaceWith(photo);controlSlot.replaceWith(controls);d.remove();document.body.style.overflow=bodyOverflow;applyPrint();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
   d.querySelector('[data-editor-cancel]').onclick=()=>d.close();
   d.querySelector('[data-editor-apply]').onclick=()=>{applied=true;d.close()};
-  document.body.style.overflow='hidden';d.showModal();applyPrint();
+  document.body.style.overflow='hidden';d.showModal();fitPhoto();applyPrint();
  }
  function bindPrint(){
   const area=gallery.querySelector('.dfm3-print-touch'),portrait=gallery.querySelector('.dfm3-portrait'),slider=gallery.querySelector('.dfm3-print-controls input');
