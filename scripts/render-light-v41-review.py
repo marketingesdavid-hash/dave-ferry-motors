@@ -71,7 +71,7 @@ for m in ('jack','sophie','george','emma'):
    # Do not revert cloth in the wrist rectangle: protect only pixels where
    # the old, verified green/burgundy image was unchanged from black.
    alpha[region&(delta<5)]=0
-  blue=(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(y>420)
+  blue=(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(y>hem-26)
   denim_guard=blue|(y>=hem+1)
   skin=(black[:,:,0]-black[:,:,2]>32)&(l>60)
   alpha[denim_guard|skin]=0
