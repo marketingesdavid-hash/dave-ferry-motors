@@ -374,8 +374,8 @@ window.DFM_CATALOG=[
   {
     "key": "nsu",
     "title": "NSU 500 1T – 1930",
-    "art": "/assets/dfm-art-nsu.svg",
-    "print": "/assets/dfm-print-nsu.svg",
+    "art": "/assets/nsu-v41-refined/nsu-motor.webp",
+    "print": "/assets/nsu-v41-refined/nsu-motor.webp",
     "info": "NSU 500 1T – 1930",
     "story": "Classic German motorcycle with understated period styling.",
     "fullPrint": false,
