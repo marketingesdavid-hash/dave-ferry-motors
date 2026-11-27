@@ -86,16 +86,27 @@ for m in ('jack','sophie','george','emma'):
   alpha=np.clip(gaussian_filter(alpha,.4),0,1);alpha[denim_guard|skin]=0
   base=black.copy()
   if k=='george-hoodie':
-   q=np.sqrt(((x-299)/61)**2+((y-169)/38)**2)
-   blend=(1-smooth(.68,1,q))[...,None];base=base*(1-blend)+gray*blend
-   # Protect actual beard and neck via the skin/colour evidence, not a rectangular cutout.
+   # The registered grey hoodie has the intact beard. Use the same original
+   # beard pixels in all five colors, restricted to the face and beard contour.
+   patch=Image.new('L',(596,653))
+   ImageDraw.Draw(patch).polygon([(247,111),(266,108),(289,113),(316,110),(339,115),(352,130),(355,148),(350,167),(344,182),(334,193),(317,199),(292,200),(274,196),(259,187),(250,175),(244,151),(244,129)],fill=255)
+   beard=np.array(patch,dtype=np.float32)/255
+   beard=np.clip(gaussian_filter(beard,1.3),0,1)
+   blend=beard[...,None]
+   base=base*(1-blend)+gray*blend
+   alpha*=1-beard
+   for c,original in [('black',black),('khaki',khaki),('burgundy',burgundy)]:
+    fixed=np.rint(original*(1-blend)+gray*blend).clip(0,255).astype('uint8')
+    Image.fromarray(fixed).save(out/(k+'-'+c+'.webp'),lossless=True,method=6)
   for c,ref in [('white',white),('gray',gray)]:
    # Preserve original photo outside garment, including every blue denim pixel.
-   im=np.rint(base*(1-alpha[...,None])+ref*alpha[...,None]).clip(0,255).astype('uint8')
+   mixed=base*(1-alpha[...,None])+ref*alpha[...,None]
+   if k=='george-hoodie':mixed=mixed*(1-blend)+gray*blend
+   im=np.rint(mixed).clip(0,255).astype('uint8')
    assert np.array_equal(im[denim_guard],black.astype('uint8')[denim_guard])
    Image.fromarray(im).save(out/(k+'-'+c+'.webp'),lossless=True,method=6)
   for col,c in enumerate(('black','white','gray','khaki','burgundy')):
-   im=Image.fromarray(base.astype('uint8')) if c=='black' else Image.open((out if c in ('white','gray') else root/'assets/models-v32')/(k+'-'+c+'.webp'))
+   im=Image.open(out/(k+'-'+c+'.webp')) if k=='george-hoodie' or c in ('white','gray') else Image.fromarray(base.astype('uint8')) if c=='black' else Image.open(root/'assets/models-v32'/(k+'-'+c+'.webp'))
    im=im.copy();im.thumbnail((225,255));xx=col*240;yy=26+row*300
    sheet.paste(im,(xx+(240-im.width)//2,yy+22));draw.text((xx+8,yy+4),g+' / '+c,fill='#222')
  sheet.save(qa/(m+'-current-variants.jpg'),quality=92)
