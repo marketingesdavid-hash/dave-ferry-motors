@@ -23,7 +23,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -48,7 +49,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -74,7 +76,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -99,7 +102,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -125,7 +129,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -150,7 +155,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -176,7 +182,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -201,7 +208,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -227,7 +235,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -252,7 +261,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -278,7 +288,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -303,7 +314,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -329,7 +341,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -354,7 +367,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -380,7 +394,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -405,7 +420,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   },
   {
@@ -431,7 +447,8 @@ window.DFM_CATALOG=[
       "black",
       "white",
       "gray",
-      "khaki"
+      "khaki",
+      "burgundy"
     ],
     "sizes": [
       "XS",
@@ -456,7 +473,8 @@ window.DFM_CATALOG=[
     },
     "status": "enquiry",
     "colorAvailability": {
-      "khaki": "preview; availability and exact shade subject to SP Print confirmation"
+      "khaki": "preview; availability and exact shade subject to SP Print confirmation",
+      "burgundy": "preview; availability and exact shade subject to SP Print confirmation"
     }
   }
 ];
