@@ -96,7 +96,33 @@ for points,width in [([(218,386),(490,238),(535,207)],13), ([(355,449),(411,285)
 # Keep real visible fine spokes and metallic edges, not empty holes.
 luma=rgb.max(axis=2)
 fine=((oldalpha>25)&(luma>12)&allowed)|((luma>18)&allowed)|((luma>7)&binary_dilation(solid,iterations=2)&allowed)
-mask=(solid|fine)&allowed
+# Restore broad opaque members from their original dark-metal boundaries.
+# A brightness cutoff is not used inside these traced shapes.
+more=[
+ [(202,375),(219,367),(249,350),(300,322),(349,292),(399,262),(450,231),(485,210),(505,200),(514,207),(508,220),(473,238),(424,267),(373,299),(325,329),(275,356),(229,386),(214,397)],
+ [(742,144),(759,141),(775,146),(780,159),(770,190),(755,227),(742,261),(729,296),(719,335),(708,375),(696,413),(684,442),(676,441),(681,419),(690,383),(701,347),(712,308),(723,273),(736,235),(748,198),(757,170)],
+ [(784,151),(796,145),(807,159),(822,183),(840,208),(864,243),(888,276),(909,304),(934,339),(958,371),(975,391),(967,402),(955,396),(935,371),(913,341),(891,309),(868,278),(845,243),(824,212),(805,184)],
+ [(819,145),(829,143),(845,166),(866,195),(889,225),(912,257),(934,289),(957,321),(980,354),(991,373),(982,382),(972,371),(949,339),(927,306),(904,275),(882,244),(859,213),(838,182)],
+ [(502,218),(544,216),(583,223),(620,229),(652,230),(696,226),(711,230),(706,247),(676,250),(640,246),(604,247),(565,244),(539,252),(513,245)],
+ [(364,255),(380,247),(394,252),(409,274),(421,296),(419,325),(408,347),(398,367),(385,366),(387,346),(394,325),(399,304),(389,284),(375,269)],
+ [(416,278),(435,269),(451,269),(472,280),(481,293),(475,310),(464,322),(441,325),(424,315),(415,303)],
+ [(468,253),(493,250),(508,256),(515,269),(512,287),(499,295),(483,291),(473,279)],
+ [(519,248),(543,248),(556,254),(558,270),(548,286),(532,284),(523,269)],
+ [(514,361),(530,346),(553,344),(579,358),(604,370),(630,381),(653,394),(669,416),(665,448),(649,470),(622,482),(592,480),(566,468),(545,446),(528,418),(517,390)],
+ [(79,208),(90,205),(105,213),(110,229),(105,240),(92,241),(82,235)],
+ [(53,260),(63,252),(72,256),(74,271),(66,294),(56,308),(41,312),(34,308),(39,288)],
+ [(130,162),(149,157),(179,158),(217,158),(258,160),(298,162),(331,166),(339,171),(334,177),(297,170),(258,167),(216,165),(177,165),(149,166),(139,173),(139,184),(133,190),(127,178)]
+]
+for points in more:
+ q=poly(points);solid|=q;allowed|=q
+# Fill pinholes inside physical structures, not wheel cavities or open frame triangles.
+from scipy.ndimage import binary_closing,binary_fill_holes
+core=solid|fine
+closed=binary_closing(core,iterations=2)
+holes=binary_fill_holes(closed)&~core
+labh,_=label(holes) if 'label' in globals() else __import__('scipy.ndimage',fromlist=['label']).label(holes)
+counts=np.bincount(labh.ravel());small=(counts<=70);small[0]=False
+mask=(solid|fine|small[labh])&allowed
 # Retain a close contour around each source component, excluding all near-black
 # floor outside the traced wheel contours.
 mask[(np.arange(H)[:,None]>518)&~wheel&~solid]=False
@@ -126,4 +152,15 @@ sheet=Image.new('RGB',(1000,5*290),'#eee');d=ImageDraw.Draw(sheet)
 for i,(name,col) in enumerate([('Black','#171717'),('White','#ffffff'),('Grey','#898989'),('Military Green','#626b46'),('Burgundy','#722f37')]):
  bg=Image.new('RGBA',(1000,290),col);im=motor.copy();im.thumbnail((880,250));bg.alpha_composite(im,((1000-im.width)//2,25));sheet.paste(bg.convert('RGB'),(0,i*290));d.text((10,i*290+6),name,fill='#f5e9d0' if i in (0,3,4) else '#171717')
 sheet.save(qa/'five-colours.jpg',quality=94)
-print('NSU rendered from original 1200 px photo; 3000 x 2000 PNG; interior alpha 255 and exterior 0; manual mask visual review still required')
+# Inspect the independently preserved larger historical asset, if decodable.
+try:
+ large=Image.open(root/'assets/print-v1/nsu.webp').convert('RGBA')
+ large.load()
+ print('Large historical asset',large.size,large.getchannel('A').getextrema())
+ im=large.copy();im.thumbnail((900,550))
+ proof=Image.new('RGB',(960,1160),'#eee')
+ for i,c in enumerate(('#ffffff','#626b46')):
+  bg=Image.new('RGBA',(960,580),c);bg.alpha_composite(im,((960-im.width)//2,(580-im.height)//2));proof.paste(bg.convert('RGB'),(0,i*580))
+ proof.save(qa/'legacy-review.jpg',quality=92)
+except Exception as exc:print('Large asset unreadable',repr(exc))
+print('NSU review output: 3000 x 2000 PNG; visual approval required')
