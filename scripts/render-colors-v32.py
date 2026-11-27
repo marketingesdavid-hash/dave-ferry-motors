@@ -83,6 +83,38 @@ for key,points in outlines.items():
  alpha=np.maximum(core*keep,fill*.94)*allowed
  alpha=np.maximum(alpha,np.maximum(collar,shoulder)*neutral*.98)
  alpha=np.clip(gaussian_filter(alpha,.55),0,1)
+ # Lock jeans, hands and jewelry to the original photograph. The hem curves
+ # follow the actual black garment's lower contour; the colour references
+ # previously contained small recoloured denim areas, so do not trust them here.
+ hem_curves={
+ 'jack-tshirt':[(0,574),(180,574),(215,578),(260,581),(306,582),(355,580),(406,574),(595,574)],
+ 'sophie-tshirt':[(0,513),(209,513),(244,518),(280,521),(310,521),(352,518),(390,510),(595,510)],
+ 'george-tshirt':[(0,608),(196,607),(223,616),(258,625),(300,628),(336,626),(371,620),(401,609),(595,609)],
+ 'emma-tshirt':[(0,510),(170,510),(199,510),(220,516),(250,523),(290,528),(325,528),(356,523),(380,518),(410,509),(595,509)],
+ 'jack-hoodie':[(0,593),(190,588),(245,594),(350,594),(407,588),(595,593)],
+ 'sophie-hoodie':[(0,555),(215,550),(248,556),(353,556),(390,550),(595,555)],
+ 'george-hoodie':[(0,605),(210,599),(249,605),(361,605),(407,598),(595,605)],
+ 'emma-hoodie':[(0,578),(210,570),(244,578),(378,577),(420,570),(595,578)]
+ }
+ hx,hy=zip(*hem_curves[key]);hem=np.interp(np.arange(W),hx,hy)[None,:]
+ alpha*=1-smooth(-.6,.9,yy-hem)
+ denim=(yy>hem-26)&(black[:,:,2]-black[:,:,0]>6)&(black[:,:,1]-black[:,:,0]>3)&(l>19)
+ alpha[denim]=0
+ jewelry={
+ 'jack-tshirt': [[(423,562),(450,560),(474,566),(478,584),(463,597),(430,592)]],
+ 'jack-hoodie': [[(141,540),(159,539),(181,555),(193,569),(180,584),(153,566)],[(411,543),(433,544),(451,553),(461,573),(444,584),(421,566)]],
+ 'sophie-tshirt': [[(397,473),(412,472),(425,484),(420,500),(410,506),(396,494)]],
+ 'sophie-hoodie': [[(417,521),(426,510),(441,510),(452,519),(455,531),(447,547),(435,548),(426,537)]],
+ 'george-tshirt': [[(122,558),(145,552),(166,567),(176,584),(150,593),(128,579)],[(427,558),(449,557),(470,568),(480,588),(463,609),(440,606),(425,585)]],
+ 'george-hoodie': [[(437,549),(457,545),(478,554),(484,574),(468,591),(447,582),(433,569)]],
+ 'emma-tshirt': [[(132,463),(150,451),(168,456),(177,475),(162,490),(141,481)],[(420,461),(435,462),(450,472),(453,490),(441,501),(426,486)]],
+ 'emma-hoodie': [[(146,521),(165,519),(187,534),(191,549),(177,561),(157,545)],[(421,519),(439,521),(454,529),(460,548),(448,560),(431,548)]]
+ }
+ for region in jewelry.get(key,[]):alpha*=1-poly(region)
+ if key.startswith('george'):
+  # Restore the loose hair strands crossing the upper collar; do not tint hair.
+  hairzone=(yy<211)&(((xx>204)&(xx<251))|((xx>344)&(xx<393)))
+  alpha[hairzone&(evidence<.42)]=0
  alpha[alpha<.012]=0
  # Transfer fold luminance where reference cloth was recoloured; otherwise derive
  # natural collar/lining shading from the original black cloth.
@@ -92,7 +124,7 @@ for key,points in outlines.items():
   tinted=shade[...,None]*np.array(rgb,dtype=np.float32)
   result=np.clip(base*(1-alpha[...,None])+tinted*alpha[...,None],0,255).astype('uint8')
   im=Image.fromarray(result)
-  dest=out/(key+'-'+name+'.webp');im.save(dest,format='WEBP',quality=94,method=6)
+  dest=out/(key+'-'+name+'.webp');im.save(dest,format='WEBP',lossless=True,method=6)
   assert dest.stat().st_size>5000 and (alpha>.5).sum()>15000,key
   sheets[name].append((key,im))
 for name,items in sheets.items():
