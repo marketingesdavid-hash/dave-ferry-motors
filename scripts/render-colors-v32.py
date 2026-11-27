@@ -3,7 +3,7 @@ import base64, io, json
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
-from scipy.ndimage import gaussian_filter, binary_fill_holes, label
+from scipy.ndimage import gaussian_filter, binary_fill_holes, binary_dilation, label
 root=Path(__file__).resolve().parents[1]
 src=(root/'assets/models-v4.js').read_text()
 models=json.loads(src.split('Object.freeze(',1)[1].rsplit(')',1)[0])
@@ -57,7 +57,19 @@ for key,points in outlines.items():
  # where previous recolours omitted fabric. No rectangular exclusion.
  evidence=smooth(7,42,gl-l)*smooth(18,85,wl-l)
  neutral=(1-smooth(18,48,chroma))*(1-smooth(75,145,l))
- core=np.maximum(evidence,collar*.99)*neutral*allowed
+ # Recover missed shoulder/sleeve edge pixels outside the hand-traced outline
+ # only where both registered colour references corroborate fabric.
+ expanded=binary_dilation(allowed>.5,iterations=25)
+ yy,xx=np.ogrid[:H,:W]
+ evidence_edge=expanded&(evidence>.12)
+ # Neutral dark cloth along the upper shoulder may be absent from older
+ # recolour masks; add only the outer shoulders, away from hair and skin.
+ shoulder=expanded&(yy>=215)&(yy<275)&((xx<224)|(xx>380))&(neutral>.80)
+ if key=='george-hoodie':
+  shoulder&=yy>=225
+ allowed=np.maximum(allowed,evidence_edge.astype(np.float32))
+ allowed=np.maximum(allowed,shoulder.astype(np.float32))
+ core=np.maximum(np.maximum(evidence,collar*.99),shoulder*.98)*neutral*allowed
  # Preserve hair in George's overlapping hair/hood region unless colour evidence exists.
  if key=='george-hoodie':
   yy,xx=np.ogrid[:H,:W]
@@ -69,7 +81,7 @@ for key,points in outlines.items():
  keep=np.isin(connected,ids)
  fill=binary_fill_holes(keep)&(neutral>.75)&(allowed>.5)
  alpha=np.maximum(core*keep,fill*.94)*allowed
- alpha=np.maximum(alpha,collar*neutral*.98)
+ alpha=np.maximum(alpha,np.maximum(collar,shoulder)*neutral*.98)
  alpha=np.clip(gaussian_filter(alpha,.55),0,1)
  alpha[alpha<.012]=0
  # Transfer fold luminance where reference cloth was recoloured; otherwise derive
